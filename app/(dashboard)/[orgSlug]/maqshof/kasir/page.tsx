@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
-import { Plus, Minus, Trash2, ArrowLeft, Search, UserCheck } from 'lucide-react'
+import { Plus, Minus, Trash2, ArrowLeft, Search, UserCheck, ShoppingCart } from 'lucide-react'
 import { formatCurrency } from '@/lib/utils/currency'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
@@ -64,7 +64,12 @@ export default function KasirPage() {
     formData.append('orgSlug', orgSlug)
     formData.append('orgId', organization!.id!)
     formData.append('santriId', selectedSantri.id)
-    formData.append('cart', JSON.stringify(cart.items))
+    formData.append('cart', JSON.stringify(cart.items.map(item => ({
+      id: item.produk.id,
+      nama: item.produk.nama,
+      harga: item.produk.harga_jual,
+      qty: item.qty
+    }))))
 
     try {
       await processCheckout(formData)
@@ -106,8 +111,8 @@ export default function KasirPage() {
             {filteredProducts.map(p => (
               <Card 
                 key={p.id} 
-                className={`cursor-pointer transition-colors hover:border-primary active:bg-slate-50 ${cart.items.find(i => i.id === p.id) ? 'border-primary ring-1 ring-primary' : ''}`}
-                onClick={() => cart.addItem({ id: p.id, nama: p.nama, harga: p.harga_jual, minStok: p.stok })}
+                className={`cursor-pointer transition-colors hover:border-primary active:bg-slate-50 ${cart.items.find(i => i.produk.id === p.id) ? 'border-primary ring-1 ring-primary' : ''}`}
+                onClick={() => cart.addItem(p)}
               >
                 <CardContent className="p-4 text-center aspect-[4/3] flex flex-col justify-center">
                    <div className="font-semibold line-clamp-2 leading-tight mb-2">{p.nama}</div>
@@ -163,17 +168,17 @@ export default function KasirPage() {
            ) : (
              <ul className="space-y-2">
                {cart.items.map(item => (
-                 <li key={item.id} className="bg-white p-3 rounded-lg border shadow-sm flex flex-col gap-2">
+                 <li key={item.produk.id} className="bg-white p-3 rounded-lg border shadow-sm flex flex-col gap-2">
                     <div className="flex justify-between font-medium">
-                      <span className="line-clamp-1">{item.nama}</span>
-                      <span>{formatCurrency(item.harga * item.qty)}</span>
+                      <span className="line-clamp-1">{item.produk.nama}</span>
+                      <span>{formatCurrency(item.produk.harga_jual * item.qty)}</span>
                     </div>
                     <div className="flex justify-between items-center text-muted-foreground text-sm border-t pt-2">
-                      <span>{formatCurrency(item.harga)}</span>
+                      <span>{formatCurrency(item.produk.harga_jual)}</span>
                       <div className="flex items-center gap-3">
-                        <button onClick={() => item.qty === 1 ? cart.removeItem(item.id) : cart.updateQuantity(item.id, item.qty - 1)} className="rounded-full bg-slate-100 p-1 hover:bg-slate-200"><Minus className="h-4 w-4"/></button>
+                        <button onClick={() => item.qty === 1 ? cart.removeItem(item.produk.id) : cart.updateQty(item.produk.id, item.qty - 1)} className="rounded-full bg-slate-100 p-1 hover:bg-slate-200"><Minus className="h-4 w-4"/></button>
                         <span className="w-4 text-center font-semibold text-slate-900">{item.qty}</span>
-                        <button onClick={() => cart.updateQuantity(item.id, item.qty + 1)} className="rounded-full bg-slate-100 p-1 hover:bg-slate-200"><Plus className="h-4 w-4"/></button>
+                        <button onClick={() => cart.updateQty(item.produk.id, item.qty + 1)} className="rounded-full bg-slate-100 p-1 hover:bg-slate-200"><Plus className="h-4 w-4"/></button>
                       </div>
                     </div>
                  </li>
@@ -190,7 +195,7 @@ export default function KasirPage() {
            )}
            <div className="flex justify-between items-center text-lg">
               <span className="font-bold text-muted-foreground">Total</span>
-              <span className="font-bold text-2xl text-primary">{formatCurrency(cart.total)}</span>
+              <span className="font-bold text-2xl text-primary">{formatCurrency(cart.getTotal())}</span>
            </div>
            <Button 
              className="w-full h-14 text-lg" 
