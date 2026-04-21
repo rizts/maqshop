@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
-import { CheckCircle2, Building2 } from 'lucide-react'
+import { CheckCircle2, Building2, User, Mail, Lock, Globe } from 'lucide-react'
 
 export default function GetStartedPage() {
   const router = useRouter()
@@ -55,7 +55,6 @@ export default function GetStartedPage() {
     setIsLoading(true)
 
     try {
-      // Call signUp with metadata that triggers the database-level registration
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -70,10 +69,6 @@ export default function GetStartedPage() {
       })
 
       if (authError) throw authError
-      
-      // If sign up is successful, the trigger has already created the org and profile.
-      // If email confirmation is off, authData.user will be present.
-      // If email confirmation is on, we still consider it a "success" state for the UI.
       setIsSuccess(true)
       
     } catch (error: any) {
@@ -89,24 +84,28 @@ export default function GetStartedPage() {
 
   if (isSuccess) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
-        <div className="w-full max-w-[500px] space-y-6 rounded-xl border bg-white p-10 text-center shadow-lg">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-            <CheckCircle2 className="h-10 w-10 text-green-600" />
+      <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-emerald-50 via-slate-50 to-emerald-50/30 px-4">
+        <div className="w-full max-w-[550px] space-y-8 rounded-3xl border bg-white/80 p-10 text-center shadow-2xl backdrop-blur-xl animate-fade-in-up">
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-emerald-100 shadow-inner">
+            <CheckCircle2 className="h-12 w-12 text-emerald-600" />
           </div>
-          <div className="space-y-2">
-            <h1 className="text-3xl font-bold">Pendaftaran Berhasil!</h1>
-            <p className="text-muted-foreground text-lg">
-              Pondok <strong>{formData.pondokName}</strong> telah berhasil didaftarkan.
+          <div className="space-y-3">
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">Pendaftaran Berhasil!</h1>
+            <p className="text-slate-600 text-lg leading-relaxed">
+              Pondok <strong>{formData.pondokName}</strong> telah berhasil didaftarkan ke ekosistem digital Deposantri.
             </p>
           </div>
-          <div className="bg-slate-50 p-4 rounded-lg text-sm text-left border">
-            <p className="font-medium mb-1">URL Portal Anda:</p>
-            <code className="text-primary break-all">
-              {window.location.origin}/{formData.slug}/login
-            </code>
+          <div className="bg-emerald-50/50 p-6 rounded-2xl text-sm text-left border border-emerald-100/50">
+            <p className="font-semibold text-emerald-900 mb-2 flex items-center gap-2">
+              <Globe className="h-4 w-4" /> URL Portal Anda:
+            </p>
+            <div className="bg-white rounded-lg p-3 border border-emerald-200 flex items-center justify-between group">
+              <code className="text-emerald-700 font-medium break-all mr-2">
+                {window.location.origin}/{formData.slug}/login
+              </code>
+            </div>
           </div>
-          <Button asChild className="w-full h-12 text-lg">
+          <Button asChild className="w-full h-14 text-lg font-semibold rounded-2xl shadow-lg shadow-emerald-200 transition-all hover:scale-[1.02] active:scale-[0.98]">
             <Link href={`/${formData.slug}/login`}>
               Masuk ke Portal Pondok
             </Link>
@@ -117,110 +116,152 @@ export default function GetStartedPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12">
-      <div className="w-full max-w-[600px] space-y-8 rounded-2xl border bg-white p-10 shadow-xl">
-        <div className="space-y-2 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-            <Building2 className="h-6 w-6 text-primary" />
+    <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-50 via-white to-emerald-50 px-4 py-20">
+      {/* Decorative background elements */}
+      <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
+        <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-100/30 blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-slate-200/50 blur-[120px]" />
+      </div>
+
+      <div className="w-full max-w-[650px] space-y-10 rounded-3xl border bg-white/70 p-10 shadow-2xl backdrop-blur-xl animate-fade-in-up">
+        <div className="space-y-4 text-center">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-600 shadow-lg shadow-emerald-200">
+            <Building2 className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold">Daftarkan Pondok Anda</h1>
-          <p className="text-muted-foreground">
-            Langkah awal menuju digitalisasi keuangan pesantren yang terpadu.
-          </p>
+          <div className="space-y-2">
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">Mulai Digitalisasi</h1>
+            <p className="text-slate-500 text-lg">
+              Solusi cerdas manajemen keuangan pondok pesantren masa kini.
+            </p>
+          </div>
         </div>
 
-        <form onSubmit={handleRegister} className="space-y-6">
-          <div className="space-y-4 border-b pb-6">
-            <h3 className="font-semibold text-lg">Informasi Pondok</h3>
-            <div className="space-y-2">
-              <Label htmlFor="pondokName">Nama Pondok Pesantren</Label>
-              <Input
-                id="pondokName"
-                placeholder="Contoh: Pondok Pesantren Al-Hidayah"
-                required
-                value={formData.pondokName}
-                onChange={(e) => setFormData({...formData, pondokName: e.target.value})}
-              />
+        <form onSubmit={handleRegister} className="space-y-8">
+          <div className="space-y-6">
+            <div className="flex items-center gap-3 border-b border-slate-100 pb-2 mb-4">
+              <Building2 className="h-5 w-5 text-emerald-600" />
+              <h3 className="font-bold text-xl text-slate-800">Informasi Pondok</h3>
             </div>
             
-            <div className="space-y-2">
-              <Label htmlFor="slug">Slug / ID URL (Hanya huruf, angka, dan -)</Label>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground bg-slate-100 px-3 py-2 rounded border">
-                  deposantri.id/
-                </span>
-                <Input
-                  id="slug"
-                  placeholder="al-hidayah"
-                  required
-                  value={formData.slug}
-                  onChange={(e) => setFormData({...formData, slug: e.target.value.toLowerCase().replace(/\s+/g, '-')})}
-                />
-              </div>
-              <p className="text-[12px] text-muted-foreground">
-                URL ini akan digunakan untuk akses wali santri dan staff: deposantri.id/<strong>{formData.slug || 'slug-anda'}</strong>
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="font-semibold text-lg">Informasi Pengelola (Admin)</h3>
-            <div className="space-y-2">
-              <Label htmlFor="fullName">Nama Lengkap Pengelola</Label>
-              <Input
-                id="fullName"
-                placeholder="Nama Lengkap"
-                required
-                value={formData.fullName}
-                onChange={(e) => setFormData({...formData, fullName: e.target.value})}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="email">Email Admin</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="admin@pondok.com"
-                required
-                value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  value={formData.password}
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
-                />
+            <div className="grid gap-6 sm:grid-cols-2">
+              <div className="space-y-2 sm:col-span-1">
+                <Label htmlFor="pondokName" className="text-slate-700 font-medium ml-1">Nama Pondok Pesantren</Label>
+                <div className="relative group">
+                  <Input
+                    id="pondokName"
+                    placeholder="Al-Hidayah"
+                    required
+                    value={formData.pondokName}
+                    onChange={(e) => setFormData({...formData, pondokName: e.target.value})}
+                    className="h-12 bg-white/50 border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 rounded-xl transition-all"
+                  />
+                </div>
               </div>
               
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Konfirmasi Password</Label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  required
-                  value={formData.confirmPassword}
-                  onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                />
+              <div className="space-y-2 sm:col-span-1">
+                <Label htmlFor="slug" className="text-slate-700 font-medium ml-1">Slug / ID URL</Label>
+                <div className="relative flex items-center group">
+                  <span className="absolute left-3 text-xs font-semibold text-slate-400 pointer-events-none">
+                    id/
+                  </span>
+                  <Input
+                    id="slug"
+                    placeholder="al-hidayah"
+                    required
+                    value={formData.slug}
+                    onChange={(e) => setFormData({...formData, slug: e.target.value.toLowerCase().replace(/\s+/g, '-')})}
+                    className="h-12 pl-8 bg-white/50 border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 rounded-xl transition-all font-medium"
+                  />
+                </div>
               </div>
             </div>
           </div>
 
-          <Button type="submit" className="w-full h-12 text-lg" disabled={isLoading}>
-            {isLoading ? 'Sedang mendaftarkan...' : 'Daftarkan Pondok Sekarang'}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3 border-b border-slate-100 pb-2 mb-4">
+              <User className="h-5 w-5 text-emerald-600" />
+              <h3 className="font-bold text-xl text-slate-800">Pengelola (Admin)</h3>
+            </div>
+
+            <div className="space-y-5">
+              <div className="space-y-2">
+                <Label htmlFor="fullName" className="text-slate-700 font-medium ml-1 text-sm">Nama Lengkap</Label>
+                <div className="relative group">
+                  <User className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+                  <Input
+                    id="fullName"
+                    placeholder="Nama Lengkap Anda"
+                    required
+                    value={formData.fullName}
+                    onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+                    className="h-12 pl-11 bg-white/50 border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 rounded-xl transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-slate-700 font-medium ml-1 text-sm">Email Aktif</Label>
+                <div className="relative group">
+                  <Mail className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="admin@pondok.com"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    className="h-12 pl-11 bg-white/50 border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 rounded-xl transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="space-y-2">
+                  <Label htmlFor="password" title="Password" className="text-slate-700 font-medium ml-1 text-sm">Password</Label>
+                  <div className="relative group">
+                    <Lock className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+                    <Input
+                      id="password"
+                      type="password"
+                      required
+                      value={formData.password}
+                      onChange={(e) => setFormData({...formData, password: e.target.value})}
+                      className="h-12 pl-11 bg-white/50 border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 rounded-xl transition-all"
+                    />
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword" title="Konfirmasi Password" className="text-slate-700 font-medium ml-1 text-sm">Konfirmasi Password</Label>
+                  <div className="relative group">
+                    <Lock className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      required
+                      value={formData.confirmPassword}
+                      onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                      className="h-12 pl-11 bg-white/50 border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 rounded-xl transition-all"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <Button type="submit" className="w-full h-14 text-lg font-bold rounded-2xl shadow-xl shadow-emerald-200/50 transition-all hover:scale-[1.01] active:scale-[0.99] mt-4" disabled={isLoading}>
+            {isLoading ? (
+              <span className="flex items-center gap-2">
+                <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full" />
+                Mendaftarkan...
+              </span>
+            ) : 'Daftarkan Pondok Sekarang'}
           </Button>
         </form>
 
-        <div className="text-center text-sm">
-          Sudah terdaftar?{' '}
-          <Link href="/login" className="font-semibold text-primary hover:underline">
+        <div className="text-center text-slate-500 pt-2 font-medium">
+          Sudah memiliki akun?{' '}
+          <Link href="/login" className="text-emerald-600 hover:text-emerald-700 hover:underline transition-colors">
             Login di sini
           </Link>
         </div>
