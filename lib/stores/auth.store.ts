@@ -11,6 +11,7 @@ interface AuthState {
   setUser: (user: any | null) => void
   setProfile: (profile: Profile | null) => void
   setOrganization: (org: Organization | null) => void
+  setAuth: (user: any | null, profile: Profile | null, organization: Organization | null) => void
   clearAuth: () => void
 }
 
@@ -21,5 +22,6 @@ export const useAuthStore = create<AuthState>((set) => ({
   setUser: (user) => set({ user }),
   setProfile: (profile) => set({ profile }),
   setOrganization: (org) => set({ organization: org }),
+  setAuth: (user, profile, organization) => set({ user, profile, organization }),
   clearAuth: () => set({ user: null, profile: null, organization: null }),
 }))

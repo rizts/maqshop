@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/lib/stores/auth.store'
+import type { Profile, Organization } from '@/types'
 import { 
   Building2, 
   LayoutDashboard, 
@@ -22,9 +23,20 @@ interface NavItem {
   roles: string[]
 }
 
-export function Sidebar({ orgSlug }: { orgSlug?: string }) {
+export function Sidebar({ 
+  orgSlug, 
+  initialProfile, 
+  initialOrganization 
+}: { 
+  orgSlug?: string, 
+  initialProfile?: Profile | null,
+  initialOrganization?: Organization | null
+}) {
   const pathname = usePathname()
-  const { profile, organization } = useAuthStore()
+  const { profile: storeProfile, organization: storeOrganization } = useAuthStore()
+  
+  const profile = storeProfile || initialProfile
+  const organization = storeOrganization || initialOrganization
   
   if (!profile) return null
 
