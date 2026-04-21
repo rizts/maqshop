@@ -259,11 +259,18 @@ export default function GetStartedPage() {
           </Button>
         </form>
 
-        <div className="text-center text-slate-500 pt-2 font-medium">
-          Sudah memiliki akun?{' '}
-          <Link href="/login" className="text-emerald-600 hover:text-emerald-700 hover:underline transition-colors">
-            Login di sini
-          </Link>
+        <div className="flex flex-col items-center gap-4 text-center text-slate-500 pt-2 font-medium">
+          <p>
+            Sudah memiliki akun?{' '}
+            <Link href="/login" className="text-emerald-600 hover:text-emerald-700 hover:underline transition-colors">
+              Login di sini
+            </Link>
+          </p>
+          <div className="pt-4 border-t border-slate-100 w-full">
+            <Link href="/" className="text-slate-400 hover:text-emerald-600 transition-colors flex items-center justify-center gap-2 text-sm">
+              &larr; Kembali ke Beranda
+            </Link>
+          </div>
         </div>
       </div>
     </div>
