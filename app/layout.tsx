@@ -6,8 +6,8 @@ import { Toaster } from '@/components/ui/sonner'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Deposantri',
-  description: 'Aplikasi Keuangan Pesantren Terpadu',
+  title: 'Maqshop',
+  description: 'Aplikasi Keuangan Pesantren Terpadu Maqshop',
 }
 
 export default function RootLayout({
