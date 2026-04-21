@@ -80,6 +80,10 @@ CREATE POLICY "Org admins can update their org"
   ON public.organizations FOR UPDATE 
   USING (id = get_user_org_id() AND is_admin());
 
+CREATE POLICY "Authenticated users can create an organization" 
+  ON public.organizations FOR INSERT 
+  WITH CHECK (auth.role() = 'authenticated');
+
 -- 2. Profiles
 -- Users can see profiles in their own org. Superadmin sees all.
 -- Users can update their own profile. Admin can update profiles in their org.
@@ -95,6 +99,10 @@ CREATE POLICY "Users can update their own profile"
 CREATE POLICY "Admins can manage profiles in their org" 
   ON public.profiles FOR ALL 
   USING ((org_id = get_user_org_id() AND is_admin()) OR is_superadmin());
+
+CREATE POLICY "Users can insert their own profile" 
+  ON public.profiles FOR INSERT 
+  WITH CHECK (auth.uid() = id);
 
 -- 3. Santri
 -- Superadmin sees all. Admin/Staff sees santri in their org based on division.
@@ -286,4 +294,51 @@ CREATE POLICY "Admin can view and manage jurnal detail"
   );
 
 -- Function to handle new user registration triggers for Supabase Auth
--- Not added yet, can be added later if needed.
+CREATE OR REPLACE FUNCTION public.handle_new_user_registration()
+RETURNS TRIGGER AS $$
+DECLARE
+  v_org_id UUID;
+  v_pondok_name TEXT;
+  v_pondok_slug TEXT;
+  v_full_name TEXT;
+  v_role TEXT;
+  v_phone TEXT;
+BEGIN
+  -- Extract metadata from auth.users signup options
+  v_full_name := COALESCE(NEW.raw_user_meta_data->>'full_name', 'User');
+  v_role := COALESCE(NEW.raw_user_meta_data->>'role', 'staff');
+  v_phone := NEW.raw_user_meta_data->>'phone';
+  v_pondok_name := NEW.raw_user_meta_data->>'pondok_name';
+  v_pondok_slug := NEW.raw_user_meta_data->>'pondok_slug';
+  
+  -- If org_id is passed (e.g. for parent registration to existing org)
+  IF (NEW.raw_user_meta_data->>'org_id') IS NOT NULL THEN
+    v_org_id := (NEW.raw_user_meta_data->>'org_id')::UUID;
+  END IF;
+
+  -- 1. Handle Organization Creation (New Pondok flow)
+  -- Only create if pondok_name is provided and org_id is not yet set
+  IF v_pondok_name IS NOT NULL AND v_pondok_slug IS NOT NULL AND v_org_id IS NULL THEN
+    INSERT INTO public.organizations (name, slug, status)
+    VALUES (v_pondok_name, v_pondok_slug, 'active')
+    RETURNING id INTO v_org_id;
+  END IF;
+
+  -- 2. Handle Profile Creation
+  -- Note: org_id will be NULL for Superadmin if not provided
+  INSERT INTO public.profiles (id, org_id, full_name, role, phone, is_active)
+  VALUES (NEW.id, v_org_id, v_full_name, v_role, v_phone, true);
+
+  RETURN NEW;
+EXCEPTION WHEN OTHERS THEN
+  -- Raise error will cause auth.users insert to rollback (atomicity)
+  RAISE EXCEPTION 'Registration failed: %', SQLERRM;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Create the trigger on auth.users
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user_registration();
+

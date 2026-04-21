@@ -19,7 +19,7 @@ CREATE TABLE public.organizations (
   settings    JSONB DEFAULT '{
     "withdrawal_limit_enabled": true,
     "withdrawal_limit_amount": 50000,
-    "withdrawal_limit_interval": "daily",     -- daily | weekly | monthly
+    "withdrawal_limit_interval": "daily",
     "low_balance_threshold": 10000,
     "allow_negative_balance": false,
     "currency": "IDR",

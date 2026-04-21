@@ -11,7 +11,7 @@ export default function PlatformLandingPage() {
           </div>
           <nav className="flex items-center gap-4">
             <Link href="/login" className="text-sm font-medium">
-              Login Superadmin
+              Masuk
             </Link>
           </nav>
         </div>

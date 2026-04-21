@@ -38,7 +38,7 @@ export default function RegisterPage() {
     setIsLoading(true)
 
     try {
-      // 1. Get org id from slug
+      // 1. Get org id from slug (still needed for the metadata)
       const { data: org, error: orgError } = await supabase
         .from('organizations')
         .select('id')
@@ -47,7 +47,7 @@ export default function RegisterPage() {
 
       if (orgError) throw new Error('Organization not found')
 
-      // 2. Sign up user
+      // 2. Sign up user - Metadata will trigger profile creation
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -56,38 +56,21 @@ export default function RegisterPage() {
             full_name: formData.fullName,
             phone: formData.phone,
             org_id: org.id,
-            role: 'ortu' // Default role for self-registration is ortu
+            role: 'ortu'
           }
         }
       })
 
       if (authError) throw authError
 
-      // Note: Supabase triggers can handle profile creation via Postgres functions, 
-      // but for this MVP, if email confirmation is disabled, user is created directly.
-      // If email confirm is enabled, they need to check email. Let's assume they might be created immediately.
-      
-      // Attempt to create profile if it doesn't exist via trigger yet
-      if (authData.user) {
-        const { error: profileError } = await supabase.from('profiles').upsert({
-          id: authData.user.id,
-          org_id: org.id,
-          full_name: formData.fullName,
-          phone: formData.phone,
-          role: 'ortu',
-          division: 'all',
-          is_active: true
-        }, { onConflict: 'id' })
-        
-        if (profileError) {
-          console.error("Profile creation error or it already exists:", profileError)
-        }
-      }
-
       setIsSuccess(true)
       
     } catch (error: any) {
-      toast.error(error.message || 'Registration failed')
+      if (error.code === 'over_email_send_rate_limit') {
+        toast.error('Terlalu banyak permintaan. Silakan tunggu sebentar sebelum mencoba lagi.')
+      } else {
+        toast.error(error.message || 'Pendaftaran gagal')
+      }
     } finally {
       setIsLoading(false)
     }
