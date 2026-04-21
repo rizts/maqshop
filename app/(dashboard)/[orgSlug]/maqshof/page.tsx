@@ -73,7 +73,7 @@ export default async function MaqshofDashboardPage({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-orange-500">0</div>
-            <p className="text-xs text-muted-foreground">Produk hampir habis (< 5 pcs)</p>
+            <p className="text-xs text-muted-foreground">Produk hampir habis (&lt; 5 pcs)</p>
           </CardContent>
         </Card>
       </div>
