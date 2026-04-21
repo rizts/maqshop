@@ -261,9 +261,9 @@ export default async function PlatformLandingPage() {
             <div className="space-y-6">
               <h4 className="font-bold text-slate-900">Legal</h4>
               <ul className="space-y-3 text-sm text-slate-500">
-                <li><Link href="#" className="hover:text-emerald-600 transition-colors">Syarat & Ketentuan</Link></li>
-                <li><Link href="#" className="hover:text-emerald-600 transition-colors">Kebijakan Privasi</Link></li>
-                <li><Link href="#" className="hover:text-emerald-600 transition-colors">Bantuan</Link></li>
+                <li><Link href="/terms" className="hover:text-emerald-600 transition-colors">Syarat & Ketentuan</Link></li>
+                <li><Link href="/privacy" className="hover:text-emerald-600 transition-colors">Kebijakan Privasi</Link></li>
+                <li><Link href="/help" className="hover:text-emerald-600 transition-colors">Bantuan</Link></li>
               </ul>
             </div>
           </div>
