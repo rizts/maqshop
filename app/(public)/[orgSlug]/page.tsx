@@ -48,7 +48,13 @@ export default async function OrgLandingPage({
           </Button>
         </div>
 
-        <p className="px-8 text-center text-sm text-muted-foreground">
+        <div className="pt-4 border-t border-slate-100">
+          <Link href="/" className="text-muted-foreground hover:text-emerald-600 transition-colors flex items-center justify-center gap-2 text-xs">
+            &larr; Kembali ke Portal Utama Deposantri
+          </Link>
+        </div>
+
+        <p className="px-8 text-center text-[10px] text-slate-400">
           By clicking continue, you agree to our{' '}
           <Link href="/terms" className="underline underline-offset-4 hover:text-primary">
             Terms of Service
