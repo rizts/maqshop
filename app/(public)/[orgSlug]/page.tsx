@@ -41,10 +41,10 @@ export default async function OrgLandingPage({
 
         <div className="grid gap-4">
           <Button asChild className="w-full">
-            <Link href={`/${orgSlug}/login`}>Login Account</Link>
+            <Link href={`/${orgSlug}/login`}>Masuk ke Akun</Link>
           </Button>
           <Button variant="outline" asChild className="w-full">
-            <Link href={`/${orgSlug}/register`}>Register as Parent (Ortu)</Link>
+            <Link href={`/${orgSlug}/register`}>Daftar sebagai Wali Santri</Link>
           </Button>
         </div>
 
@@ -55,13 +55,13 @@ export default async function OrgLandingPage({
         </div>
 
         <p className="px-8 text-center text-[10px] text-slate-400">
-          By clicking continue, you agree to our{' '}
+          Dengan mengeklik lanjut, Anda menyetujui{' '}
           <Link href="/terms" className="underline underline-offset-4 hover:text-primary">
-            Terms of Service
+            Syarat & Ketentuan
           </Link>{' '}
-          and{' '}
+          dan{' '}
           <Link href="/privacy" className="underline underline-offset-4 hover:text-primary">
-            Privacy Policy
+            Kebijakan Privasi
           </Link>
           .
         </p>

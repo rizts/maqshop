@@ -19,7 +19,7 @@ export default async function SantriListPage({
   const supabase = await createClient()
 
   const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single()
-  if (!org) return <div>Tenant Not Found</div>
+  if (!org) return <div>Lembaga tidak ditemukan</div>
 
   // Fetch Santri. RLS automatically filters by division !
   let query = supabase
@@ -42,7 +42,7 @@ export default async function SantriListPage({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Data Santri</h1>
-          <p className="text-muted-foreground">Manage students and their accounts.</p>
+          <p className="text-muted-foreground">Kelola santri dan akun mereka.</p>
         </div>
         <Button asChild>
           <Link href={`/${orgSlug}/santri/tambah`}>
@@ -54,13 +54,13 @@ export default async function SantriListPage({
 
       <Card>
         <CardHeader>
-          <CardTitle>List of Santri</CardTitle>
+          <CardTitle>Daftar Santri</CardTitle>
           <div className="flex items-center gap-4 mt-2">
             <form className="flex w-full items-center gap-2 max-w-sm">
               <Input 
                 type="search" 
                 name="q" 
-                placeholder="Search name..." 
+                placeholder="Cari nama..." 
                 defaultValue={q} 
               />
               <Button type="submit" size="icon" variant="secondary">
@@ -69,7 +69,7 @@ export default async function SantriListPage({
             </form>
             {/* Simple static filter visualization */}
             <div className="text-sm text-muted-foreground ml-auto bg-muted px-3 py-1.5 rounded-md">
-              <span className="font-medium text-foreground">{santriList?.length || 0}</span> students found
+              <span className="font-medium text-foreground">{santriList?.length || 0}</span> santri ditemukan
             </div>
           </div>
         </CardHeader>
@@ -92,14 +92,14 @@ export default async function SantriListPage({
                   <tr key={s.id} className="border-b last:border-0 hover:bg-muted/50">
                     <td className="p-4">{s.nis || '-'}</td>
                     <td className="p-4 font-medium">{s.full_name}</td>
-                    <td className="p-4 capitalize">{s.gender}</td>
+                    <td className="p-4 capitalize">{s.gender === 'male' ? 'Laki-laki' : 'Perempuan'}</td>
                     <td className="p-4">{s.kelas || '-'} / {s.kamar || '-'}</td>
                     <td className="p-4 text-right font-medium">
                       Rp {new Intl.NumberFormat('id-ID').format(s.tabungan?.saldo || 0)}
                     </td>
                     <td className="p-4 text-center">
                       <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${s.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-700'}`}>
-                        {s.status}
+                        {s.status === 'active' ? 'Aktif' : s.status === 'alumni' ? 'Alumni' : 'Keluar'}
                       </span>
                     </td>
                     <td className="p-4 text-right">

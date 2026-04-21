@@ -19,7 +19,7 @@ export default async function TabunganDashboardPage({
   const supabase = await createClient()
 
   const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single()
-  if (!org) return <div>Tenant Not Found</div>
+  if (!org) return <div>Lembaga tidak ditemukan</div>
 
   // Total accumulative stats for the org (or division)
   const { data: globalTabungan } = await supabase

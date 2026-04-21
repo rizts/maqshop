@@ -47,7 +47,7 @@ export default function LoginPage() {
         // Verify if user belongs to this org or is superadmin
         if (profile.role !== 'superadmin' && profile.organizations?.slug !== orgSlug) {
            await supabase.auth.signOut()
-           throw new Error("You don't have access to this organization.")
+           throw new Error("Anda tidak memiliki akses ke lembaga ini.")
         }
         
         setProfile(profile)
@@ -62,7 +62,7 @@ export default function LoginPage() {
         }
       }
     } catch (error: any) {
-      toast.error(error.message || 'Failed to login')
+      toast.error(error.message || 'Gagal masuk')
     } finally {
       setIsLoading(false)
     }
@@ -72,26 +72,26 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
       <div className="w-full max-w-[400px] space-y-6 rounded-xl border bg-white p-8 shadow-sm">
         <div className="space-y-2 text-center">
-          <h1 className="text-2xl font-bold">Login</h1>
+          <h1 className="text-2xl font-bold">Masuk ke Portal</h1>
           <p className="text-sm text-muted-foreground">
-            Enter your email and password to access {orgSlug}'s portal
+            Masukkan email dan kata sandi Anda untuk mengakses portal {orgSlug}
           </p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Alamat Email</Label>
             <Input
               id="email"
               type="email"
-              placeholder="m@example.com"
+              placeholder="nama@contoh.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Kata Sandi</Label>
             <Input
               id="password"
               type="password"
@@ -101,13 +101,13 @@ export default function LoginPage() {
             />
           </div>
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? 'Signing in...' : 'Sign in'}
+            {isLoading ? 'Sedang masuk...' : 'Masuk'}
           </Button>
         </form>
 
         <div className="text-center text-sm">
           <Link href={`/${orgSlug}`} className="text-muted-foreground hover:text-primary">
-            &larr; Back to {orgSlug} portal
+            &larr; Kembali ke portal {orgSlug}
           </Link>
         </div>
       </div>

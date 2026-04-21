@@ -18,7 +18,7 @@ export default async function ProfilePage({
   // Middleware and layout ensure auth exists
   const { data: { user } } = await supabase.auth.getUser()
   
-  if (!user) return <div>User not found</div>
+  if (!user) return <div>Pengguna tidak ditemukan</div>
 
   const { data: profileData } = await supabase
     .from('profiles')
@@ -28,19 +28,19 @@ export default async function ProfilePage({
 
   const profile = profileData as Profile | null
 
-  if (!profile) return <div>Profile not found</div>
+  if (!profile) return <div>Profil tidak ditemukan</div>
 
   return (
     <div className="flex flex-col gap-8 max-w-3xl animate-fade-in-up">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">My Profile</h1>
-        <p className="text-slate-500">Manage your personal information and security settings.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900">Profil Saya</h1>
+        <p className="text-slate-500">Kelola informasi pribadi dan pengaturan keamanan Anda.</p>
       </div>
 
       <Tabs defaultValue="personal" className="w-full">
         <TabsList className="mb-4 bg-white border border-slate-200 p-1 rounded-xl shadow-sm">
-          <TabsTrigger value="personal" className="rounded-lg px-6 py-2 data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm transition-all font-semibold">Personal Info</TabsTrigger>
-          <TabsTrigger value="security" className="rounded-lg px-6 py-2 data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm transition-all font-semibold">Security</TabsTrigger>
+          <TabsTrigger value="personal" className="rounded-lg px-6 py-2 data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm transition-all font-semibold">Info Pribadi</TabsTrigger>
+          <TabsTrigger value="security" className="rounded-lg px-6 py-2 data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm transition-all font-semibold">Keamanan</TabsTrigger>
         </TabsList>
 
         <TabsContent value="personal" className="mt-0 outline-none">
@@ -48,8 +48,8 @@ export default async function ProfilePage({
             <form action={updateProfileName}>
               <input type="hidden" name="orgSlug" value={orgSlug} />
               <CardHeader>
-                <CardTitle className="text-xl">Personal Information</CardTitle>
-                <CardDescription>Your profile details used across the platform.</CardDescription>
+                <CardTitle className="text-xl">Informasi Pribadi</CardTitle>
+                <CardDescription>Detail profil Anda yang digunakan di seluruh platform.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="flex flex-col sm:flex-row gap-6">
@@ -57,12 +57,16 @@ export default async function ProfilePage({
                     <div className="h-24 w-24 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-3xl">
                       {profile.full_name?.[0]?.toUpperCase() || 'U'}
                     </div>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{profile.role}</p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">
+                      {profile.role === 'superadmin' ? 'Super Admin' : 
+                       profile.role === 'admin' ? 'Admin Pondok' :
+                       profile.role === 'staff' ? 'Pengelola' : 'Wali Santri'}
+                    </p>
                   </div>
                   
                   <div className="flex-1 space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="full_name" className="text-slate-700">Full Name</Label>
+                      <Label htmlFor="full_name" className="text-slate-700">Nama Lengkap</Label>
                       <Input 
                         id="full_name" 
                         name="full_name"
@@ -73,18 +77,18 @@ export default async function ProfilePage({
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="email" className="text-slate-700">Email Address</Label>
+                      <Label htmlFor="email" className="text-slate-700">Alamat Email</Label>
                       <Input 
                         id="email" 
                         defaultValue={user.email} 
                         readOnly 
                         className="bg-slate-50/50 cursor-not-allowed"
                       />
-                      <p className="text-[10px] text-slate-400">Email cannot be changed directly.</p>
+                      <p className="text-[10px] text-slate-400">Email tidak dapat diubah secara langsung.</p>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="division" className="text-slate-700">Division</Label>
+                      <Label htmlFor="division" className="text-slate-700">Divisi</Label>
                       <Input 
                         id="division" 
                         defaultValue={profile.division} 
@@ -96,7 +100,7 @@ export default async function ProfilePage({
                 </div>
               </CardContent>
               <CardFooter className="flex justify-end border-t border-slate-50 pt-6">
-                <Button type="submit">Save Changes</Button>
+                <Button type="submit">Simpan Perubahan</Button>
               </CardFooter>
             </form>
           </Card>
@@ -107,38 +111,38 @@ export default async function ProfilePage({
             <form action={updatePassword}>
               <input type="hidden" name="orgSlug" value={orgSlug} />
               <CardHeader>
-                <CardTitle className="text-xl">Security</CardTitle>
-                <CardDescription>Update your password to keep your account secure.</CardDescription>
+                <CardTitle className="text-xl">Keamanan</CardTitle>
+                <CardDescription>Perbarui kata sandi Anda untuk menjaga keamanan akun Anda.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="new_password" className="text-slate-700">New Password</Label>
+                  <Label htmlFor="new_password" className="text-slate-700">Kata Sandi Baru</Label>
                   <Input 
                     id="new_password" 
                     name="new_password"
                     type="password"
                     required
                     minLength={6}
-                    placeholder="At least 6 characters"
+                    placeholder="Minimal 6 karakter"
                     className="bg-white"
                   />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="confirm_password" className="text-slate-700">Confirm Password</Label>
+                  <Label htmlFor="confirm_password" className="text-slate-700">Konfirmasi Kata Sandi</Label>
                   <Input 
                     id="confirm_password" 
                     name="confirm_password"
                     type="password"
                     required
                     minLength={6}
-                    placeholder="Retype your new password"
+                    placeholder="Tulis ulang kata sandi baru Anda"
                     className="bg-white"
                   />
                 </div>
               </CardContent>
               <CardFooter className="flex justify-end border-t border-slate-50 pt-6">
-                <Button type="submit" variant="secondary">Change Password</Button>
+                <Button type="submit" variant="secondary">Ubah Kata Sandi</Button>
               </CardFooter>
             </form>
           </Card>

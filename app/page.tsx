@@ -17,7 +17,7 @@ export default function PlatformLandingPage() {
                 Deposantri
               </span>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] -mt-1">
-                Digital Ecosystem
+                Ekosistem Digital
               </span>
             </div>
           </Link>
@@ -132,7 +132,7 @@ export default function PlatformLandingPage() {
                       <Building2 className="h-6 w-6" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-white">Support Center</p>
+                      <p className="text-sm font-bold text-white">Pusat Dukungan</p>
                       <p className="text-sm text-slate-400">Gedung Inovasi Digital, Lantai 4</p>
                     </div>
                   </div>
@@ -141,7 +141,7 @@ export default function PlatformLandingPage() {
                       <Mail className="h-6 w-6" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-white">Email & Chat</p>
+                      <p className="text-sm font-bold text-white">Email & Obrolan</p>
                       <p className="text-sm text-slate-400">help@deposantri.id | WA: +62 812-3456-7890</p>
                     </div>
                   </div>

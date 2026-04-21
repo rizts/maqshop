@@ -30,8 +30,8 @@ export default async function OrgSettingsPage({
   return (
     <div className="flex flex-col gap-8 max-w-4xl">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Organization Settings</h1>
-        <p className="text-muted-foreground">Manage your organization's configuration and limits.</p>
+        <h1 className="text-3xl font-bold tracking-tight">Pengaturan Lembaga</h1>
+        <p className="text-muted-foreground">Kelola konfigurasi dan batasan lembaga Anda.</p>
       </div>
 
       <form action={updateTenantSettings}>
@@ -42,16 +42,16 @@ export default async function OrgSettingsPage({
         <div className="grid gap-6">
           <Card>
             <CardHeader>
-              <CardTitle>Pondok Profiles</CardTitle>
-              <CardDescription>General information about the boarding school.</CardDescription>
+              <CardTitle>Profil Pondok</CardTitle>
+              <CardDescription>Informasi umum mengenai pondok pesantren.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Organization Name</Label>
+                <Label htmlFor="name">Nama Lembaga</Label>
                 <Input id="name" name="name" defaultValue={org.name} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="address">Address</Label>
+                <Label htmlFor="address">Alamat</Label>
                 <Input id="address" name="address" defaultValue={org.address || ''} />
               </div>
             </CardContent>
@@ -60,14 +60,14 @@ export default async function OrgSettingsPage({
           <Card>
             <CardHeader>
               <CardTitle>Keuangan & Batas Penarikan</CardTitle>
-              <CardDescription>Configure limits and thresholds for student accounts.</CardDescription>
+              <CardDescription>Konfigurasi batasan dan ambang batas akun santri.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-center justify-between rounded-lg border p-4">
                 <div className="space-y-0.5">
-                  <Label className="text-base">Enable Withdrawal Limit</Label>
+                  <Label className="text-base">Aktifkan Batas Penarikan</Label>
                   <p className="text-sm text-muted-foreground">
-                    Enforce a maximum amount for withdrawals.
+                    Terapkan jumlah maksimum untuk penarikan.
                   </p>
                 </div>
                 {/* Note: since this is a native form submission, we use a hidden input for the switch or just a normal checkbox for simplicity in server actions. Let's use standard native inputs for simplicity in this baseline */}
@@ -81,7 +81,7 @@ export default async function OrgSettingsPage({
 
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="withdrawal_limit_amount">Limit Amount (Rp)</Label>
+                  <Label htmlFor="withdrawal_limit_amount">Jumlah Batasan (Rp)</Label>
                   <Input 
                     id="withdrawal_limit_amount" 
                     name="withdrawal_limit_amount" 
@@ -91,22 +91,22 @@ export default async function OrgSettingsPage({
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="withdrawal_limit_interval">Limit Interval</Label>
+                  <Label htmlFor="withdrawal_limit_interval">Interval Batasan</Label>
                   <select 
                     id="withdrawal_limit_interval" 
                     name="withdrawal_limit_interval" 
                     className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     defaultValue={settings.withdrawal_limit_interval}
                   >
-                     <option value="daily">Daily</option>
-                     <option value="weekly">Weekly</option>
-                     <option value="monthly">Monthly</option>
+                     <option value="daily">Harian</option>
+                     <option value="weekly">Mingguan</option>
+                     <option value="monthly">Bulanan</option>
                   </select>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="low_balance_threshold">Low Balance Warning Threshold (Rp)</Label>
+                <Label htmlFor="low_balance_threshold">Ambang Batas Peringatan Saldo Rendah (Rp)</Label>
                 <Input 
                   id="low_balance_threshold" 
                   name="low_balance_threshold" 
@@ -118,9 +118,9 @@ export default async function OrgSettingsPage({
 
               <div className="flex items-center justify-between rounded-lg border p-4">
                 <div className="space-y-0.5">
-                  <Label className="text-base">Allow Negative Balance</Label>
+                  <Label className="text-base">Izinkan Saldo Negatif</Label>
                   <p className="text-sm text-muted-foreground">
-                    Allow student balances to go below zero (debt).
+                    Izinkan saldo santri berada di bawah nol (hutang).
                   </p>
                 </div>
                 <input 
@@ -132,7 +132,7 @@ export default async function OrgSettingsPage({
               </div>
             </CardContent>
             <CardFooter>
-               <Button type="submit">Save Changes</Button>
+               <Button type="submit">Simpan Perubahan</Button>
             </CardFooter>
           </Card>
         </div>

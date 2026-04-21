@@ -103,7 +103,7 @@ export default async function MaqshofDashboardPage({
         <Card className="opacity-50">
            <CardHeader>
              <ArrowLeftRight className="h-8 w-8 text-muted-foreground mb-2" />
-             <CardTitle>Mutasi Stok (Coming Soon)</CardTitle>
+             <CardTitle>Mutasi Stok (Segera Hadir)</CardTitle>
              <CardDescription>Modul penyesuaian inventaris, restock dan retur dari vendor.</CardDescription>
            </CardHeader>
         </Card>

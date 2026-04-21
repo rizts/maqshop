@@ -44,7 +44,7 @@ export default async function LaporanDashboardPage({
            <CardHeader>
              <FileText className="h-8 w-8 text-muted-foreground mb-2" />
              <CardTitle>Rekap Tabungan Global</CardTitle>
-             <CardDescription>Export rekap seluruh saldo santri saat ini (Coming soon).</CardDescription>
+             <CardDescription>Export rekap seluruh saldo santri saat ini (Segera hadir).</CardDescription>
            </CardHeader>
         </Card>
       </div>

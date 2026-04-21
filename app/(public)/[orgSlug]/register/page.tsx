@@ -31,7 +31,7 @@ export default function RegisterPage() {
     e.preventDefault()
     
     if (formData.password !== formData.confirmPassword) {
-      toast.error('Passwords do not match')
+      toast.error('Kata sandi tidak cocok')
       return
     }
 
@@ -45,7 +45,7 @@ export default function RegisterPage() {
         .eq('slug', orgSlug)
         .single()
 
-      if (orgError) throw new Error('Organization not found')
+      if (orgError) throw new Error('Lembaga tidak ditemukan')
 
       // 2. Sign up user - Metadata will trigger profile creation
       const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -83,12 +83,12 @@ export default function RegisterPage() {
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
             <CheckCircle2 className="h-6 w-6 text-green-600" />
           </div>
-          <h1 className="text-2xl font-bold">Registration Successful</h1>
+          <h1 className="text-2xl font-bold">Pendaftaran Berhasil</h1>
           <p className="text-muted-foreground">
-            Your account has been created. You can now login to the portal.
+            Akun Anda telah dibuat. Sekarang Anda dapat masuk ke portal.
           </p>
           <Button asChild className="w-full mt-4">
-            <Link href={`/${orgSlug}/login`}>Go to Login</Link>
+            <Link href={`/${orgSlug}/login`}>Masuk ke Portal</Link>
           </Button>
         </div>
       </div>
@@ -99,48 +99,51 @@ export default function RegisterPage() {
     <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-8">
       <div className="w-full max-w-[450px] space-y-6 rounded-xl border bg-white p-8 shadow-sm">
         <div className="space-y-2 text-center">
-          <h1 className="text-2xl font-bold">Register as Parent</h1>
+          <h1 className="text-2xl font-bold">Daftar sebagai Wali Santri</h1>
           <p className="text-sm text-muted-foreground">
-            Create an account to monitor your children at {orgSlug}
+            Buat akun untuk memantau tabungan anak Anda di {orgSlug}
           </p>
         </div>
 
         <form onSubmit={handleRegister} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="fullName">Full Name</Label>
+            <Label htmlFor="fullName">Nama Lengkap</Label>
             <Input
               id="fullName"
               required
               value={formData.fullName}
               onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+              placeholder="Contoh: Budi Santoso"
             />
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="phone">Phone Number (WhatsApp)</Label>
+            <Label htmlFor="phone">Nomor WhatsApp</Label>
             <Input
               id="phone"
               type="tel"
               required
               value={formData.phone}
               onChange={(e) => setFormData({...formData, phone: e.target.value})}
+              placeholder="081234567890"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Alamat Email</Label>
             <Input
               id="email"
               type="email"
               required
               value={formData.email}
               onChange={(e) => setFormData({...formData, email: e.target.value})}
+              placeholder="nama@contoh.com"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Kata Sandi</Label>
               <Input
                 id="password"
                 type="password"
@@ -151,7 +154,7 @@ export default function RegisterPage() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm</Label>
+              <Label htmlFor="confirmPassword">Konfirmasi</Label>
               <Input
                 id="confirmPassword"
                 type="password"
@@ -163,14 +166,20 @@ export default function RegisterPage() {
           </div>
 
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? 'Creating account...' : 'Register'}
+            {isLoading ? 'Mendaftarkan akun...' : 'Daftar'}
           </Button>
         </form>
 
         <div className="text-center text-sm">
-          Already have an account?{' '}
+          Sudah memiliki akun?{' '}
           <Link href={`/${orgSlug}/login`} className="font-semibold text-primary hover:underline">
-            Login here
+            Masuk di sini
+          </Link>
+        </div>
+
+        <div className="pt-4 border-t border-slate-100">
+          <Link href={`/${orgSlug}`} className="text-muted-foreground hover:text-emerald-600 transition-colors flex items-center justify-center gap-2 text-xs">
+            &larr; Kembali ke portal {orgSlug}
           </Link>
         </div>
       </div>

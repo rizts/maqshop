@@ -217,7 +217,7 @@ export default function GetStartedPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="space-y-2">
-                  <Label htmlFor="password" title="Password" className="text-slate-700 font-medium ml-1 text-sm">Password</Label>
+                  <Label htmlFor="password" title="Kata Sandi" className="text-slate-700 font-medium ml-1 text-sm">Kata Sandi</Label>
                   <div className="relative group">
                     <Lock className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
                     <Input
@@ -232,7 +232,7 @@ export default function GetStartedPage() {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword" title="Konfirmasi Password" className="text-slate-700 font-medium ml-1 text-sm">Konfirmasi Password</Label>
+                  <Label htmlFor="confirmPassword" title="Konfirmasi Kata Sandi" className="text-slate-700 font-medium ml-1 text-sm">Konfirmasi Kata Sandi</Label>
                   <div className="relative group">
                     <Lock className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
                     <Input

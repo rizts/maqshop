@@ -55,26 +55,26 @@ export function Sidebar({
 
   if (isSuperadmin) {
     navItems = [
-      { title: 'Dashboard', href: '/superadmin/dashboard', icon: <LayoutDashboard className="h-5 w-5" />, roles: ['superadmin'] },
-      { title: 'Organizations', href: '/superadmin/organizations', icon: <Building2 className="h-5 w-5" />, roles: ['superadmin'] },
-      { title: 'Platform Users', href: '/superadmin/users', icon: <Users className="h-5 w-5" />, roles: ['superadmin'] },
+      { title: 'Beranda', href: '/superadmin/dashboard', icon: <LayoutDashboard className="h-5 w-5" />, roles: ['superadmin'] },
+      { title: 'Lembaga', href: '/superadmin/organizations', icon: <Building2 className="h-5 w-5" />, roles: ['superadmin'] },
+      { title: 'Pengguna Platform', href: '/superadmin/users', icon: <Users className="h-5 w-5" />, roles: ['superadmin'] },
     ]
   } else if (profile.role === 'ortu') {
     navItems = [
-      { title: 'Dashboard', href: `/${orgSlug}/ortu/dashboard`, icon: <LayoutDashboard className="h-5 w-5" />, roles: ['ortu'] },
+      { title: 'Beranda', href: `/${orgSlug}/ortu/dashboard`, icon: <LayoutDashboard className="h-5 w-5" />, roles: ['ortu'] },
       { title: 'Top-up Saldo', href: `/${orgSlug}/ortu/topup`, icon: <Wallet className="h-5 w-5" />, roles: ['ortu'] },
       { title: 'Riwayat Jajan', href: `/${orgSlug}/ortu/riwayat`, icon: <FileText className="h-5 w-5" />, roles: ['ortu'] },
     ]
   } else {
     // Admin or Staff
     navItems = [
-      { title: 'Dashboard', href: `/${orgSlug}/dashboard`, icon: <LayoutDashboard className="h-5 w-5" />, roles: ['admin', 'staff'] },
+      { title: 'Beranda', href: `/${orgSlug}/dashboard`, icon: <LayoutDashboard className="h-5 w-5" />, roles: ['admin', 'staff'] },
       { title: 'Santri', href: `/${orgSlug}/santri`, icon: <Users className="h-5 w-5" />, roles: ['admin', 'staff'] },
       { title: 'Tabungan', href: `/${orgSlug}/tabungan`, icon: <Wallet className="h-5 w-5" />, roles: ['admin', 'staff'] },
       { title: 'Maqshof', href: `/${orgSlug}/maqshof`, icon: <ShoppingCart className="h-5 w-5" />, roles: ['admin', 'staff'] },
       { title: 'Laporan', href: `/${orgSlug}/laporan`, icon: <FileText className="h-5 w-5" />, roles: ['admin'] },
-      { title: 'Users', href: `/${orgSlug}/users`, icon: <Users className="h-5 w-5" />, roles: ['admin'] },
-      { title: 'Settings', href: `/${orgSlug}/settings`, icon: <Settings className="h-5 w-5" />, roles: ['admin'] },
+      { title: 'Pengguna', href: `/${orgSlug}/users`, icon: <Users className="h-5 w-5" />, roles: ['admin'] },
+      { title: 'Pengaturan', href: `/${orgSlug}/settings`, icon: <Settings className="h-5 w-5" />, roles: ['admin'] },
     ]
   }
 
@@ -110,7 +110,7 @@ export function Sidebar({
               <span className="text-sm font-bold text-slate-900 group-hover:text-emerald-700 transition-colors uppercase tracking-wider truncate">
                 {organization?.name || 'Deposantri'}
               </span>
-              <span className="text-[10px] font-medium text-slate-500">DIGITAL ECOSYSTEM</span>
+              <span className="text-[10px] font-medium text-slate-500">EKOSISTEM DIGITAL</span>
             </div>
           )}
         </Link>
@@ -178,7 +178,11 @@ export function Sidebar({
           {!isSidebarCollapsed && (
             <div className="flex flex-col min-w-0 transition-opacity duration-300">
               <p className="text-xs font-bold text-slate-900 truncate">{profile.full_name}</p>
-              <p className="text-[10px] text-slate-500 uppercase tracking-tighter">{profile.role}</p>
+              <p className="text-[10px] text-slate-500 uppercase tracking-tighter">
+                {profile.role === 'superadmin' ? 'Super Admin' : 
+                 profile.role === 'admin' ? 'Admin Pondok' :
+                 profile.role === 'staff' ? 'Pengelola' : 'Wali Santri'}
+              </p>
             </div>
           )}
         </div>

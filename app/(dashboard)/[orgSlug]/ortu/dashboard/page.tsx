@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Wallet, Info, FileText, ArrowUpRight, Upload } from 'lucide-react'
 import { formatCurrency } from '@/lib/utils/currency'
@@ -16,7 +16,7 @@ export default async function OrtuDashboardPage({
 
   // Get user profile
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return <div>Unauthorized</div>
+  if (!user) return <div>Sesi berakhir. Silakan login kembali.</div>
 
   // Fetch children (santri) tied to this guardian
   const { data: childrenRaw } = await supabase

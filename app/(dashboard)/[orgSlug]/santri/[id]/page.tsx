@@ -59,7 +59,7 @@ export default async function SantriDetailPage({
         <Button variant="secondary" asChild>
           <Link href={`/${orgSlug}/santri/${id}/edit`}>
             <Edit className="mr-2 h-4 w-4" />
-            Edit Profile
+            Edit Profil
           </Link>
         </Button>
       </div>
@@ -105,11 +105,11 @@ export default async function SantriDetailPage({
             <div className="grid grid-cols-2 gap-y-4">
               <div>
                 <p className="text-sm text-muted-foreground">Divisi/Gender</p>
-                <p className="font-medium capitalize">{santri.gender}</p>
+                <p className="font-medium capitalize">{santri.gender === 'male' ? 'Laki-laki' : 'Perempuan'}</p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Status</p>
-                <p className="font-medium capitalize">{santri.status}</p>
+                <p className="font-medium capitalize">{santri.status === 'active' ? 'Aktif' : santri.status === 'alumni' ? 'Alumni' : 'Keluar'}</p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Kelas</p>
@@ -168,7 +168,10 @@ export default async function SantriDetailPage({
                       <td className="p-4">
                         <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium 
                           ${trx.tipe.includes('deposit') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                          {trx.tipe.replace('_', ' ').toUpperCase()}
+                          {trx.tipe === 'deposit_cash' ? 'Deposit Tunai' : 
+                           trx.tipe === 'deposit_transfer' ? 'Deposit Transfer' :
+                           trx.tipe === 'withdrawal' ? 'Penarikan' :
+                           trx.tipe === 'pos_deduct' ? 'Belanja Maqshof' : 'Penyesuaian'}
                         </span>
                       </td>
                       <td className="p-4">{trx.keterangan || '-'}</td>

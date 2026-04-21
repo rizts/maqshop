@@ -50,7 +50,7 @@ export default async function OrgDashboardPage({
   return (
     <div className="flex flex-col gap-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard Overview</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Ringkasan Dashboard</h1>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -61,7 +61,7 @@ export default async function OrgDashboardPage({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalSantri || 0}</div>
-            <p className="text-xs text-muted-foreground">Active in this tenant</p>
+            <p className="text-xs text-muted-foreground">Aktif di pondok ini</p>
           </CardContent>
         </Card>
 
@@ -95,16 +95,16 @@ export default async function OrgDashboardPage({
             <CardTitle>Overview Tabungan</CardTitle>
           </CardHeader>
           <CardContent className="pl-2 flex justify-center items-center h-[300px] text-muted-foreground">
-            Chart will be displayed here
+            Grafik akan ditampilkan di sini
           </CardContent>
         </Card>
         
         <Card className="col-span-3">
           <CardHeader>
-            <CardTitle>Recent Top-up Requests</CardTitle>
+            <CardTitle>Permintaan Top-up Terbaru</CardTitle>
           </CardHeader>
           <CardContent className="flex justify-center items-center h-[300px] text-muted-foreground">
-            No pending requests
+            Tidak ada permintaan tertunda
           </CardContent>
         </Card>
       </div>

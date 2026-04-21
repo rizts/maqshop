@@ -45,8 +45,8 @@ export function Header() {
           {organization?.name || 'Deposantri'}
         </h1>
         <div className="hidden md:flex flex-col">
-          <h2 className="text-lg font-extrabold text-slate-800 leading-tight">Dashboard Overview</h2>
-          <p className="text-xs font-medium text-slate-500 uppercase tracking-widest">Islamic Boarding School Management</p>
+          <h2 className="text-lg font-extrabold text-slate-800 leading-tight">Ringkasan Dashboard</h2>
+          <p className="text-xs font-medium text-slate-500 uppercase tracking-widest">Manajemen Pondok Pesantren</p>
         </div>
       </div>
       
@@ -67,7 +67,11 @@ export function Header() {
               </Avatar>
               <div className="hidden lg:flex flex-col items-start min-w-[100px]">
                 <p className="text-sm font-bold text-slate-900 group-hover:text-emerald-700 transition-colors leading-none mb-1">{profile?.full_name}</p>
-                <p className="text-[10px] font-medium text-slate-500 uppercase tracking-tighter capitalize">{profile?.role}</p>
+                <p className="text-[10px] font-medium text-slate-500 uppercase tracking-tighter capitalize">
+                  {profile?.role === 'superadmin' ? 'Super Admin' : 
+                   profile?.role === 'admin' ? 'Admin Pondok' :
+                   profile?.role === 'staff' ? 'Pengelola' : 'Wali Santri'}
+                </p>
               </div>
             </Button>
           </DropdownMenuTrigger>
@@ -93,7 +97,7 @@ export function Header() {
                 className="rounded-lg px-3 py-2 cursor-pointer focus:bg-emerald-50 focus:text-emerald-700 group transition-colors"
               >
                 <User className="mr-2 h-4 w-4 text-slate-400 group-focus:text-emerald-600" />
-                <span>My Profile</span>
+                <span>Profil Saya</span>
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => {
@@ -106,7 +110,7 @@ export function Header() {
                 className="rounded-lg px-3 py-2 cursor-pointer focus:bg-emerald-50 focus:text-emerald-700 group transition-colors"
               >
                 <SettingsIcon className="mr-2 h-4 w-4 text-slate-400 group-focus:text-emerald-600" />
-                <span>Account Settings</span>
+                <span>Pengaturan Akun</span>
               </DropdownMenuItem>
             </div>
             <DropdownMenuSeparator className="mx-2 bg-slate-50" />
@@ -116,7 +120,7 @@ export function Header() {
                 className="rounded-lg px-3 py-2 cursor-pointer focus:bg-red-50 focus:text-red-600 text-red-500 group transition-colors"
               >
                 <LogOut className="mr-2 h-4 w-4" />
-                <span className="font-semibold">Log out</span>
+                <span className="font-semibold">Keluar</span>
               </DropdownMenuItem>
             </div>
           </DropdownMenuContent>

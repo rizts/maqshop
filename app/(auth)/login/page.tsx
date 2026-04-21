@@ -76,7 +76,7 @@ export default function GlobalLoginPage() {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Alamat Email</Label>
             <Input
               id="email"
               type="email"
@@ -87,7 +87,7 @@ export default function GlobalLoginPage() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Kata Sandi</Label>
             <Input
               id="password"
               type="password"
@@ -97,7 +97,7 @@ export default function GlobalLoginPage() {
             />
           </div>
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? 'Sedang masuk...' : 'Sign in'}
+            {isLoading ? 'Sedang masuk...' : 'Masuk'}
           </Button>
         </form>
 
