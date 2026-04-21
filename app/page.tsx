@@ -1,20 +1,37 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Building2 } from 'lucide-react'
 
 export default function PlatformLandingPage() {
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto flex h-14 items-center justify-between px-4">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-xl text-primary">Deposantri</span>
-          </div>
-          <nav className="flex items-center gap-4">
-            <Link href="/login" className="text-sm font-medium">
+    <div className="flex min-h-screen flex-col bg-white">
+      <header className="sticky top-0 z-50 w-full bg-white/70 backdrop-blur-md transition-all duration-300">
+        <div className="container mx-auto flex h-20 items-center justify-between px-6 lg:px-8">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 shadow-lg shadow-emerald-200 transition-transform group-hover:scale-110">
+              <Building2 className="h-6 w-6 text-white" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xl font-black text-slate-900 group-hover:text-emerald-700 transition-colors tracking-tight">
+                Deposantri
+              </span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] -mt-1">
+                Digital Ecosystem
+              </span>
+            </div>
+          </Link>
+          
+          <nav className="flex items-center gap-8">
+            <Link href="/login" className="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">
               Masuk
             </Link>
+            <Button asChild className="rounded-xl px-6 font-bold shadow-lg shadow-emerald-100 transition-all hover:scale-105 active:scale-95">
+              <Link href="/get-started">Daftar Pondok</Link>
+            </Button>
           </nav>
         </div>
+        {/* Subtle shadow gradient for smooth transition */}
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-100 to-transparent opacity-50" />
       </header>
 
       <main className="flex-1">
