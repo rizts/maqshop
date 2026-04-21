@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Deposantri — Platform Manajemen Keuangan Pondok Pesantren
 
-## Getting Started
+Deposantri adalah aplikasi finansial terpadu berbasis **multi-tenant** yang dirancang khusus untuk kebutuhan pondok pesantren. Aplikasi ini mengintegrasikan sistem tabungan santri, Point of Sales (POS) Maqshof (koperasi), dan laporan akuntansi otomatis.
 
-First, run the development server:
+## Fitur Utama
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Multi-tenancy:** Satu database mendukung banyak pondok pesantren dengan isolasi data yang aman menggunakan Supabase Row Level Security (RLS).
+- **Tabungan Santri:** Modul deposit, penarikan dana, dan mutasi saldo yang transparan.
+- **POS Maqshof (Koperasi):** Sistem kasir terintegrasi yang memotong saldo tabungan santri secara real-time.
+- **Double-Entry Accounting:** Auto-jurnal otomatis untuk setiap transaksi (Tabungan & POS) ke dalam Chart of Accounts (COA).
+- **Dashboard Wali Santri:** Memungkinkan orang tua memantau saldo dan riwayat belanja anak serta mengirim uang saku via top-up request.
+- **Role Based Access Control:**
+  - **Superadmin:** Manajemen tenant/organisasi platform.
+  - **Admin Pondok:** Pengaturan sistem, limit penarikan, dan manajemen user.
+  - **Staff Maqshof:** Petugas kasir dan administrasi tabungan.
+  - **Wali Santri:** Pengecekan saldo dan riwayat transaksi anak.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework:** [Next.js 15](https://nextjs.org/) (App Router)
+- **Database & Auth:** [Supabase](https://supabase.com/)
+- **UI Components:** [shadcn/ui](https://ui.shadcn.com/) + Tailwind CSS v4
+- **State Management:** [Zustand](https://github.com/pmndrs/zustand)
+- **Accounting Logic:** Custom double-entry journal system.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Persiapan Instalasi
 
-## Learn More
+1. **Clone repositori:**
+   ```bash
+   git clone <repo-url>
+   cd deposantri
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Konfigurasi Environment Variables:**
+   Salin `.env.local.example` menjadi `.env.local` dan isi dengan kredensial Supabase Anda:
+   ```bash
+   cp .env.local.example .env.local
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. **Setup Database Supabase:**
+   - Jalankan migration SQL yang tersedia di folder `supabase/migrations/` secara berurutan.
+   - Aktifkan trigger seeding COA dari `supabase/seed/default_coa.sql`.
 
-## Deploy on Vercel
+5. **Jalankan Aplikasi:**
+   ```bash
+   npm run dev
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Struktur Proyek
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `app/`: Folder utama Next.js 15 App Router.
+  - `(auth)/`: Rute untuk login dan autentikasi.
+  - `(dashboard)/`: Rute untuk admin, staff, dan ortu.
+  - `(superadmin)/`: Dashboard manajemen platform.
+  - `(public)/`: Landing page platform dan registrasi tenant.
+- `components/`: UI components (shadcn/ui).
+- `lib/`: Utilities, Supabase clients, dan Zustand stores.
+- `types/`: Definisi tipe data TypeScript.
+
+---
+Dikembangkan oleh Tim Antigravity.
