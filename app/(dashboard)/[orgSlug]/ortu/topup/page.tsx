@@ -16,25 +16,39 @@ import { UploadCloud } from 'lucide-react'
 export default function OrtuTopupPage() {
   const params = useParams()
   const orgSlug = params.orgSlug as string
-  const { profile } = useAuthStore()
-  
   const [children, setChildren] = useState<any[]>([])
+  const [isLoadingData, setIsLoadingData] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
+  const { organization, profile } = useAuthStore()
   const supabase = createClient()
 
   useEffect(() => {
-    if (profile?.id) {
-       // Get children linked to this guardian
-       supabase.from('guardian_santri')
-        .select('santri(id, full_name, nis)')
-        .eq('guardian_id', profile.id)
-        .then(({ data }) => {
-           if(data) {
-             setChildren(data.map((d: any) => d.santri))
-           }
-        })
+    async function fetchChildren() {
+      if (profile?.id && organization?.id) {
+        setIsLoadingData(true)
+        try {
+          const { data, error } = await supabase
+            .from('guardian_santri')
+            .select('santri(id, full_name, nis)')
+            .eq('guardian_id', profile.id)
+            .eq('org_id', organization.id)
+
+          if (error) throw error
+
+          if (data) {
+            setChildren(data.map((d: any) => d.santri).filter(Boolean))
+          }
+        } catch (error) {
+          console.error('Error fetching children:', error)
+          toast.error('Gagal mengambil data santri')
+        } finally {
+          setIsLoadingData(false)
+        }
+      }
     }
-  }, [profile, supabase])
+    
+    fetchChildren()
+  }, [profile, organization, supabase])
 
   const handleSubmit = async (formData: FormData) => {
     setIsLoading(true)
@@ -70,13 +84,27 @@ export default function OrtuTopupPage() {
                 name="santriId" 
                 required
                 defaultValue=""
+                disabled={isLoadingData || children.length === 0}
                 className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <option value="" disabled>-- Pilih Santri --</option>
-                {children?.map((s) => (
-                   <option key={s.id} value={s.id}>{s.full_name} {s.nis ? `(${s.nis})` : ''}</option>
-                ))}
+                {isLoadingData ? (
+                  <option value="" disabled>Memuat data santri...</option>
+                ) : children.length === 0 ? (
+                  <option value="" disabled>Belum ada santri terhubung</option>
+                ) : (
+                  <>
+                    <option value="" disabled>-- Pilih Santri --</option>
+                    {children.map((s) => (
+                      <option key={s.id} value={s.id}>{s.full_name} {s.nis ? `(${s.nis})` : ''}</option>
+                    ))}
+                  </>
+                )}
               </select>
+              {!isLoadingData && children.length === 0 && (
+                <p className="text-xs text-red-500 mt-1">
+                  Data anak belum terhubung. Silakan hubungi admin pondok.
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">

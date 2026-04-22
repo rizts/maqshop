@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft, Wallet, Calendar, Info, Edit, CreditCard, ShoppingCart } from 'lucide-react'
 import { formatCurrency } from '@/lib/utils/currency'
 import { format } from 'date-fns'
+import GuardianManager from './guardian-manager'
 
 export default async function SantriDetailPage({
   params,
@@ -25,14 +26,23 @@ export default async function SantriDetailPage({
       *,
       tabungan (*),
       guardian_santri (
+        id,
         relationship,
-        guardian:profiles (full_name, phone)
+        guardian:profiles (id, full_name, phone)
       )
     `)
     .eq('id', id)
     .single()
 
   if (error || !santri) notFound()
+
+  // Fetch potential guardians (role = 'ortu') in the same org
+  const { data: potentialGuardians } = await supabase
+    .from('profiles')
+    .select('id, full_name')
+    .eq('org_id', org.id)
+    .eq('role', 'ortu')
+    .order('full_name')
 
   // Fetch recent transactions (limit 5)
   const { data: recentTrx } = await supabase
@@ -123,19 +133,14 @@ export default async function SantriDetailPage({
                 <p className="text-sm text-muted-foreground">Tahun Masuk</p>
                 <p className="font-medium">{santri.tahun_masuk || '-'}</p>
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Wali / Ortu Terhubung</p>
-                {santri.guardian_santri && santri.guardian_santri.length > 0 ? (
-                  <ul className="list-inside list-disc">
-                    {santri.guardian_santri.map((g: any, i: number) => (
-                      <li key={i} className="font-medium text-sm">
-                        {g.guardian.full_name} ({g.relationship || 'Wali'}) - {g.guardian.phone || '-'}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="font-medium text-muted-foreground italic">Belum ada wali terhubung</p>
-                )}
+              <div className="col-span-full mt-4 border-t pt-6">
+                <GuardianManager 
+                  santriId={santri.id}
+                  orgId={org.id}
+                  orgSlug={orgSlug}
+                  currentGuardians={santri.guardian_santri || []}
+                  potentialGuardians={potentialGuardians || []}
+                />
               </div>
             </div>
           </CardContent>

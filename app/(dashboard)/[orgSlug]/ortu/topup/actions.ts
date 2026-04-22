@@ -30,6 +30,18 @@ export async function submitTopupRequest(formData: FormData) {
 
   const orgId = profile.org_id
 
+  // Verify that the santri is indeed linked to this guardian
+  const { data: relationship } = await supabase
+    .from('guardian_santri')
+    .select('id')
+    .eq('guardian_id', user.id)
+    .eq('santri_id', santriId)
+    .single()
+
+  if (!relationship) {
+    throw new Error('Anda tidak memiliki otoritas untuk akun santri ini')
+  }
+
   // Upload Logic Placeholder - Vercel / NextJS Server Actions
   // In a real app we upload formData.get('bukti') (a File object) to Supabase Storage
   // For this MVP, we simulate a URL or handle a simple base64/placeholder
