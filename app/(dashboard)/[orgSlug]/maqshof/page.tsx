@@ -99,13 +99,14 @@ export default async function MaqshofDashboardPage({
           </Link>
         </Card>
 
-        {/* Can be expanded for Stock In / Out functionality later */}
-        <Card className="opacity-50">
-           <CardHeader>
-             <ArrowLeftRight className="h-8 w-8 text-muted-foreground mb-2" />
-             <CardTitle>Mutasi Stok (Segera Hadir)</CardTitle>
-             <CardDescription>Modul penyesuaian inventaris, restock dan retur dari vendor.</CardDescription>
-           </CardHeader>
+        <Card className="hover:border-primary/50 transition-colors cursor-pointer group" asChild>
+          <Link href={`/${orgSlug}/maqshof/stok`}>
+            <CardHeader>
+              <ArrowLeftRight className="h-8 w-8 text-primary mb-2 group-hover:scale-110 transition-transform" />
+              <CardTitle>Mutasi Stok</CardTitle>
+              <CardDescription>Modul penyesuaian inventaris, restock dan retur dari vendor.</CardDescription>
+            </CardHeader>
+          </Link>
         </Card>
       </div>
     </div>

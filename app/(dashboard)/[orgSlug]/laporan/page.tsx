@@ -40,12 +40,14 @@ export default async function LaporanDashboardPage({
         </Card>
 
         {/* Placeholder for future reporting such as Santri balances recap */}
-        <Card className="opacity-50">
-           <CardHeader>
-             <FileText className="h-8 w-8 text-muted-foreground mb-2" />
-             <CardTitle>Rekap Tabungan Global</CardTitle>
-             <CardDescription>Export rekap seluruh saldo santri saat ini (Segera hadir).</CardDescription>
-           </CardHeader>
+        <Card className="hover:border-primary/50 transition-colors cursor-pointer group" asChild>
+          <Link href={`/${orgSlug}/laporan/tabungan`}>
+            <CardHeader>
+              <FileText className="h-8 w-8 text-blue-500 mb-2 group-hover:scale-110 transition-transform" />
+              <CardTitle>Rekap Tabungan Global</CardTitle>
+              <CardDescription>Monitoring seluruh saldo santri dan riwayat mutasi dana deposit/penarikan.</CardDescription>
+            </CardHeader>
+          </Link>
         </Card>
       </div>
     </div>
