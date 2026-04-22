@@ -35,7 +35,7 @@ export async function processCheckout(formData: FormData) {
     .from('tabungan')
     .select('*, organizations(settings)')
     .eq('santri_id', santriId)
-    .single()
+    .single() as any
 
   if (!tabungan) throw new Error('Tabungan tidak ditemukan')
 
@@ -55,8 +55,7 @@ export async function processCheckout(formData: FormData) {
   const randomStr = Math.random().toString(36).substring(2, 7).toUpperCase()
   const nomor = `POS-${dateStr}-${randomStr}`
 
-  const { data: trx, error: trxError } = await supabase
-    .from('pos_transaksi')
+  const { data: trx, error: trxError } = await (supabase.from('pos_transaksi') as any)
     .insert({
       org_id: orgId,
       nomor: nomor,
@@ -67,11 +66,11 @@ export async function processCheckout(formData: FormData) {
       kasir_id: user.id
     })
     .select('id')
-    .single()
+    .single() as any
 
   if (trxError) throw new Error(`Gagal rekam transaksi POS: ${trxError.message}`)
 
-  const posId = trx.id
+  const posId = (trx as any).id
 
   // 3. Process Items: Deduct Stok, Insert Detail, Calculate HPP
   for (const item of items) {
@@ -80,7 +79,7 @@ export async function processCheckout(formData: FormData) {
       .from('produk')
       .select('nama, harga_beli, harga_jual, stok')
       .eq('id', item.id)
-      .single()
+      .single() as any
     
     if (!prod) throw new Error(`Produk dengan ID ${item.id} tidak ditemukan`)
 
@@ -88,38 +87,38 @@ export async function processCheckout(formData: FormData) {
     hpp += itemTotalBeli
 
     // Insert detail (matching actual DB schema)
-    const { error: detailError } = await supabase.from('pos_transaksi_detail').insert({
+    const { error: detailError } = await (supabase.from('pos_transaksi_detail') as any).insert({
       pos_transaksi_id: posId,
       produk_id: item.id,
-      nama_produk: prod.nama,
-      harga_beli: prod.harga_beli,
-      harga_jual: prod.harga_jual,
+      nama_produk: (prod as any).nama,
+      harga_beli: (prod as any).harga_beli,
+      harga_jual: (prod as any).harga_jual,
       qty: item.qty,
-      subtotal: prod.harga_jual * item.qty
+      subtotal: (prod as any).harga_jual * item.qty
     })
 
     if (detailError) throw new Error(`Gagal mencatat detail transaksi: ${detailError.message}`)
 
     // Deduct stock if exists
-    if (prod.stok !== null) {
-      await supabase.from('produk').update({ stok: prod.stok - item.qty }).eq('id', item.id)
+    if ((prod as any).stok !== null) {
+      await (supabase.from('produk') as any).update({ stok: (prod as any).stok - item.qty }).eq('id', item.id)
     }
   }
 
   // 4. Deduct Tabungan Balance
   const saldoSesudah = saldoSebelum - total
-  await supabase
-    .from('tabungan')
+  await (supabase
+    .from('tabungan') as any)
     .update({ 
       saldo: saldoSesudah,
-      total_keluar: Number(tabungan.total_keluar) + total,
+      total_keluar: Number((tabungan as any).total_keluar) + total,
       updated_at: new Date().toISOString()
     })
-    .eq('id', tabungan.id)
+    .eq('id', (tabungan as any).id)
 
   // 5. Insert Transaksi Tabungan Log
-  const { data: mutasi, error: mutasiError } = await supabase
-    .from('transaksi_tabungan')
+  const { data: mutasi, error: mutasiError } = await (supabase
+    .from('transaksi_tabungan') as any)
     .insert({
       org_id: orgId,
       santri_id: santriId,
@@ -132,7 +131,7 @@ export async function processCheckout(formData: FormData) {
       dibuat_oleh: user.id
     })
     .select('id')
-    .single()
+    .single() as any
 
   if (mutasiError) throw new Error(`Gagal mencatat mutasi tabungan: ${mutasiError.message}`)
 

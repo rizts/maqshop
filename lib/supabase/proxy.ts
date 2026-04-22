@@ -45,8 +45,8 @@ export async function updateSession(request: NextRequest) {
   }
 
   if (isSuperadminPath && user) {
-    const { data: profile } = await supabase
-      .from('profiles')
+    const { data: profile } = await (supabase
+      .from('profiles') as any)
       .select('role')
       .eq('id', user.id)
       .single()

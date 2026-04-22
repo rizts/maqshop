@@ -16,7 +16,7 @@ export default async function OrgDashboardPage({
     .from('organizations')
     .select('id, name')
     .eq('slug', orgSlug)
-    .single()
+    .single() as any
 
   if (!org) return <div>Org not found</div>
 
@@ -26,15 +26,15 @@ export default async function OrgDashboardPage({
   const { count: totalSantri } = await supabase
     .from('santri')
     .select('*', { count: 'exact', head: true })
-    .eq('org_id', orgId)
+    .eq('org_id', orgId) as any
 
   // Stats: Tabungan
   const { data: tabunganStats } = await supabase
     .from('tabungan')
     .select('saldo')
-    .eq('org_id', orgId)
+    .eq('org_id', orgId) as any
 
-  const totalTabungan = tabunganStats?.reduce((acc, curr) => acc + Number(curr.saldo), 0) || 0
+  const totalTabungan = tabunganStats?.reduce((acc: any, curr: any) => acc + Number(curr.saldo), 0) || 0
 
   // Stats: POS Sales Today
   const today = new Date().toISOString().split('T')[0]
@@ -43,9 +43,9 @@ export default async function OrgDashboardPage({
     .select('total')
     .eq('org_id', orgId)
     .eq('status', 'success')
-    .gte('created_at', today)
+    .gte('created_at', today) as any
 
-  const totalPosToday = posToday?.reduce((acc, curr) => acc + Number(curr.total), 0) || 0
+  const totalPosToday = posToday?.reduce((acc: any, curr: any) => acc + Number(curr.total), 0) || 0
 
   return (
     <div className="flex flex-col gap-8">

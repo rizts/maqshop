@@ -10,7 +10,7 @@ export default async function EditSantriPage({
   const { orgSlug, id } = await params
   const supabase = await createClient()
 
-  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single()
+  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single() as any
   if (!org) notFound()
 
   const { data: santri, error } = await supabase

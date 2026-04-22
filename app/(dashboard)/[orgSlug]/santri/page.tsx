@@ -18,12 +18,11 @@ export default async function SantriListPage({
   
   const supabase = await createClient()
 
-  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single()
+  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single() as any
   if (!org) return <div>Lembaga tidak ditemukan</div>
 
   // Fetch Santri. RLS automatically filters by division !
-  let query = supabase
-    .from('santri')
+  let query = (supabase.from('santri') as any)
     .select('*, tabungan(saldo)')
     .eq('org_id', org.id)
     .order('created_at', { ascending: false })
@@ -88,7 +87,7 @@ export default async function SantriListPage({
                 </tr>
               </thead>
               <tbody>
-                {santriList?.map((s) => (
+                {santriList?.map((s: any) => (
                   <tr key={s.id} className="border-b last:border-0 hover:bg-muted/50">
                     <td className="p-4">{s.nis || '-'}</td>
                     <td className="p-4 font-medium">{s.full_name}</td>

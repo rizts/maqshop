@@ -6,8 +6,8 @@ import { Building2, Mail, Phone, MapPin, ExternalLink, GraduationCap } from 'luc
 
 export default async function PlatformLandingPage() {
   const supabase = await createClient()
-  const { data: organizations } = await supabase
-    .from('organizations')
+  const { data: organizations } = await (supabase
+    .from('organizations') as any)
     .select('name, slug, logo_url, address')
     .eq('status', 'active')
     .order('name')
@@ -103,7 +103,7 @@ export default async function PlatformLandingPage() {
               </div>
 
               <div className="flex flex-wrap justify-center gap-6">
-                {organizations.map((org) => (
+                {organizations.map((org: any) => (
                   <Link 
                     key={org.slug} 
                     href={`/${org.slug}`}

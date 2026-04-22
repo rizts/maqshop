@@ -16,11 +16,11 @@ export default async function TopupRequestsPage({
   const supabase = await createClient()
 
   // Find org id
-  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single()
+  const { data: org } = await (supabase.from('organizations') as any).select('id').eq('slug', orgSlug).single()
 
   // Fetch pending requests
-  const { data: requests } = await supabase
-    .from('topup_requests')
+  const { data: requests } = await (supabase
+    .from('topup_requests') as any)
     .select(`
       *,
       santri (id, full_name, nis, gender),

@@ -19,7 +19,7 @@ export default async function OrtuRiwayatPage({
   const supabase = await createClient()
 
   // Find org id
-  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single()
+  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single() as any
 
   // Get user profile
   const { data: { user } } = await supabase.auth.getUser()
@@ -29,7 +29,7 @@ export default async function OrtuRiwayatPage({
   const { data: childrenData } = await supabase
     .from('guardian_santri')
     .select('santri_id')
-    .eq('guardian_id', user.id)
+    .eq('guardian_id', user.id) as any
 
   const allowedSantriIds = childrenData?.map((r: any) => r.santri_id) || []
   
@@ -40,7 +40,7 @@ export default async function OrtuRiwayatPage({
     : (allowedSantriIds.length > 0 ? allowedSantriIds[0] : null)
 
   const { data: santriInfo } = selectedSantriId 
-    ? await supabase.from('santri').select('full_name').eq('id', selectedSantriId).single()
+    ? await supabase.from('santri').select('full_name').eq('id', selectedSantriId).single() as any
     : { data: null }
 
   // Fetch Mutasi
@@ -86,7 +86,7 @@ export default async function OrtuRiwayatPage({
                 </tr>
               </thead>
               <tbody>
-                {mutasi?.map((trx) => {
+                {mutasi?.map((trx: any) => {
                   const isMasuk = trx.tipe.includes('deposit') || trx.tipe === 'adjustment' && trx.saldo_sesudah > trx.saldo_sebelum;
                   return (
                     <tr key={trx.id} className="border-b last:border-0 hover:bg-muted/50">

@@ -25,7 +25,7 @@ export async function submitTopupRequest(formData: FormData) {
   if (!user) throw new Error('Unauthorized')
 
   // Get Profile
-  const { data: profile } = await supabase.from('profiles').select('org_id').eq('id', user.id).single()
+  const { data: profile } = await supabase.from('profiles').select('org_id').eq('id', user.id).single() as any
   if (!profile || !profile.org_id) throw new Error('Profile invalid')
 
   const orgId = profile.org_id
@@ -36,7 +36,7 @@ export async function submitTopupRequest(formData: FormData) {
     .select('id')
     .eq('guardian_id', user.id)
     .eq('santri_id', santriId)
-    .single()
+    .single() as any
 
   if (!relationship) {
     throw new Error('Anda tidak memiliki otoritas untuk akun santri ini')
@@ -68,8 +68,8 @@ export async function submitTopupRequest(formData: FormData) {
   }
 
   // Insert Request
-  const { error } = await supabase
-    .from('topup_requests')
+  const { error } = await (supabase
+    .from('topup_requests') as any)
     .insert({
       org_id: orgId,
       santri_id: santriId,

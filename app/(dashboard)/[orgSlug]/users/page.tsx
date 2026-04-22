@@ -17,12 +17,12 @@ export default async function UsersListPage({
     .from('organizations')
     .select('id')
     .eq('slug', orgSlug)
-    .single()
+    .single() as any
 
   if (!org) return <div>Lembaga tidak ditemukan</div>
 
-  const { data: users } = await supabase
-    .from('profiles')
+  const { data: users } = await (supabase
+    .from('profiles') as any)
     .select('*')
     .eq('org_id', org.id)
     .neq('role', 'superadmin')
@@ -61,7 +61,7 @@ export default async function UsersListPage({
                   </tr>
                 </thead>
                 <tbody>
-                  {users?.map((user) => (
+                  {users?.map((user: any) => (
                     <tr key={user.id} className="border-b last:border-0 hover:bg-muted/50">
                       <td className="p-4 font-medium">{user.full_name}</td>
                       <td className="p-4 capitalize">

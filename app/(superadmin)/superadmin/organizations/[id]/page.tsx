@@ -18,7 +18,7 @@ export default async function TenantDetailPage({
     .from('organizations')
     .select('*')
     .eq('id', id)
-    .single()
+    .single() as any
 
   if (error || !org) {
     notFound()
@@ -68,7 +68,7 @@ export default async function TenantDetailPage({
         <Card>
           <CardHeader>
             <CardTitle>Status Control</CardTitle>
-            <CardDescription>Suspend or activate this tenant's access to the platform.</CardDescription>
+            <CardDescription>Suspend or activate this tenant&apos;s access to the platform.</CardDescription>
           </CardHeader>
           <CardContent>
             <form action={updateTenantStatus}>

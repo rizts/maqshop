@@ -14,11 +14,11 @@ export default async function PosRiwayatPage({
   const { orgSlug } = await params
   
   const supabase = await createClient()
-  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single()
+  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single() as any
 
   // Fetch POS Transactions
-  const { data: riwayat } = await supabase
-    .from('pos_transaksi')
+  const { data: riwayat } = await (supabase
+    .from('pos_transaksi') as any)
     .select(`
       *,
       santri (full_name, nis),
@@ -66,7 +66,7 @@ export default async function PosRiwayatPage({
                 </tr>
               </thead>
               <tbody>
-                {riwayat?.map((trx) => (
+                {riwayat?.map((trx: any) => (
                   <tr key={trx.id} className="border-b last:border-0 hover:bg-muted/50">
                     <td className="p-4 font-medium text-muted-foreground">{trx.id.split('-')[0].toUpperCase()}</td>
                     <td className="p-4">{format(new Date(trx.created_at), 'dd MMM yy, HH:mm')}</td>

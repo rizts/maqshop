@@ -18,28 +18,28 @@ export default async function TabunganDashboardPage({
   
   const supabase = await createClient()
 
-  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single()
+  const { data: org } = await (supabase.from('organizations') as any).select('id').eq('slug', orgSlug).single()
   if (!org) return <div>Lembaga tidak ditemukan</div>
 
   // Total accumulative stats for the org (or division)
-  const { data: globalTabungan } = await supabase
-    .from('tabungan')
+  const { data: globalTabungan } = await (supabase
+    .from('tabungan') as any)
     .select('saldo, total_deposit, total_keluar')
     .eq('org_id', org.id)
     
-  const totalSaldoOrg = globalTabungan?.reduce((acc, curr) => acc + Number(curr.saldo), 0) || 0
-  const totalDeposit = globalTabungan?.reduce((acc, curr) => acc + Number(curr.total_deposit), 0) || 0
+  const totalSaldoOrg = globalTabungan?.reduce((acc: any, curr: any) => acc + Number(curr.saldo), 0) || 0
+  const totalDeposit = globalTabungan?.reduce((acc: any, curr: any) => acc + Number(curr.total_deposit), 0) || 0
   
   // Pending Top-ups Count
-  const { count: pendingTopups } = await supabase
-    .from('topup_requests')
+  const { count: pendingTopups } = await (supabase
+    .from('topup_requests') as any)
     .select('*', { count: 'exact', head: true })
     .eq('org_id', org.id)
     .eq('status', 'pending')
 
   // Search tabungan
-  let query = supabase
-    .from('tabungan')
+  let query = (supabase
+    .from('tabungan') as any)
     .select('*, santri(id, full_name, nis, kelas, kamar, gender)')
     .eq('org_id', org.id)
     .order('saldo', { ascending: false })
@@ -50,7 +50,7 @@ export default async function TabunganDashboardPage({
 
   const { data: tabunganListRaw } = await query
   // Since we used ilike on a joined table, we need to filter out null relations that supabase returns when inner join fails
-  const tabunganList = tabunganListRaw?.filter(t => t.santri !== null)
+  const tabunganList = tabunganListRaw?.filter((t: any) => t.santri !== null)
 
   return (
     <div className="flex flex-col gap-8">

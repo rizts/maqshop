@@ -43,7 +43,7 @@ export default function RegisterPage() {
         .from('organizations')
         .select('id')
         .eq('slug', orgSlug)
-        .single()
+        .single() as any
 
       if (orgError) throw new Error('Lembaga tidak ditemukan')
 

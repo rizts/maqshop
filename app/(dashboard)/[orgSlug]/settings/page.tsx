@@ -21,7 +21,7 @@ export default async function OrgSettingsPage({
     .from('organizations')
     .select('*')
     .eq('slug', orgSlug)
-    .single()
+    .single() as any
 
   if (!org) return <div>Org not found</div>
   

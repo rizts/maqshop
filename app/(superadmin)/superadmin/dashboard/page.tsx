@@ -9,17 +9,17 @@ export default async function SuperadminDashboard() {
   const supabase = await createClient()
 
   // Get organizations list and basic stats
-  const { data: organizations, error } = await supabase
-    .from('organizations')
+  const { data: organizations, error } = await (supabase
+    .from('organizations') as any)
     .select('*, profiles(id)')
 
   // Total santri across platform
-  const { count: totalSantri } = await supabase
-    .from('santri')
+  const { count: totalSantri } = await (supabase
+    .from('santri') as any)
     .select('*', { count: 'exact', head: true })
 
   const totalOrgs = organizations?.length || 0
-  const activeOrgs = organizations?.filter(org => org.status === 'active').length || 0
+  const activeOrgs = organizations?.filter((org: any) => org.status === 'active').length || 0
 
   return (
     <div className="flex flex-col gap-8">
@@ -80,7 +80,7 @@ export default async function SuperadminDashboard() {
                     <td colSpan={5} className="p-4 text-center text-muted-foreground">Lembaga tidak ditemukan</td>
                   </tr>
                 ) : (
-                  organizations?.map((org) => (
+                  organizations?.map((org: any) => (
                     <tr key={org.id} className="border-b transition-colors hover:bg-muted/50">
                       <td className="p-4 align-middle font-medium">{org.name}</td>
                       <td className="p-4 align-middle text-muted-foreground">{org.slug}</td>

@@ -13,7 +13,7 @@ export default async function MaqshofDashboardPage({
   const supabase = await createClient()
 
   // Find org id
-  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single()
+  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single() as any
   
   // Basic stats
   const today = new Date().toISOString().split('T')[0]
@@ -22,13 +22,13 @@ export default async function MaqshofDashboardPage({
   const { count: productCount } = await supabase
     .from('produk')
     .select('*', { count: 'exact', head: true })
-    .eq('org_id', org?.id)
+    .eq('org_id', org?.id) as any
 
   const { count: txCount } = await supabase
     .from('pos_transaksi')
     .select('*', { count: 'exact', head: true })
     .eq('org_id', org?.id)
-    .gte('created_at', today)
+    .gte('created_at', today) as any
 
   return (
     <div className="flex flex-col gap-8">

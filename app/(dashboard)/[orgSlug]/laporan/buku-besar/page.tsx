@@ -19,7 +19,7 @@ export default async function BukuBesarPage({
   const supabase = await createClient()
 
   // Find org id
-  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single()
+  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single() as any
   if (!org) return <div>Tenant Not Found</div>
 
   const date = new Date()
@@ -27,15 +27,15 @@ export default async function BukuBesarPage({
   const lastDay = end ? end : new Date(date.getFullYear(), date.getMonth() + 1, 0).toISOString().split('T')[0]
 
   // Get all COA for filter dropdown
-  const { data: coaList } = await supabase
-    .from('chart_of_accounts')
+  const { data: coaList } = await (supabase
+    .from('chart_of_accounts') as any)
     .select('*')
     .eq('org_id', org.id)
     .order('kode')
 
   // Query Entries
-  let query = supabase
-    .from('jurnal_entries')
+  let query = (supabase
+    .from('jurnal_entries') as any)
     .select(`
       *,
       jurnal!inner(tanggal, keterangan, ref_id),
@@ -70,7 +70,7 @@ export default async function BukuBesarPage({
            <form className="flex items-center gap-2">
             <select name="coa" defaultValue={coa || 'all'} className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm max-w-[200px] truncate">
                <option value="all">-- Semua Akun --</option>
-               {coaList?.map(c => (
+               {coaList?.map((c: any) => (
                   <option key={c.id} value={c.id}>[{c.kode}] {c.nama}</option>
                ))}
             </select>

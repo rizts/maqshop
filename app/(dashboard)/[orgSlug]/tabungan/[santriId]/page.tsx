@@ -16,12 +16,12 @@ export default async function DetailTabunganSantriPage({
   const supabase = await createClient()
 
   // Find org id
-  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single()
+  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single() as any
   if (!org) notFound()
 
   // Fetch Santri and Tabungan
-  const { data: santri } = await supabase
-    .from('santri')
+  const { data: santri } = await (supabase
+    .from('santri') as any)
     .select('*, tabungan(*)')
     .eq('id', santriId)
     .single()
@@ -29,8 +29,8 @@ export default async function DetailTabunganSantriPage({
   if (!santri || !santri.tabungan) notFound()
 
   // Fetch Transaction History
-  const { data: riwayat } = await supabase
-    .from('transaksi_tabungan')
+  const { data: riwayat } = await (supabase
+    .from('transaksi_tabungan') as any)
     .select('*, profil:profiles!dibuat_oleh(full_name)')
     .eq('santri_id', santriId)
     .order('created_at', { ascending: false })
@@ -113,7 +113,7 @@ export default async function DetailTabunganSantriPage({
                 </tr>
               </thead>
               <tbody>
-                {riwayat?.map((trx) => {
+                {riwayat?.map((trx: any) => {
                   const isMasuk = trx.tipe.includes('deposit') || trx.tipe === 'adjustment' && trx.saldo_sesudah > trx.saldo_sebelum;
                   return (
                     <tr key={trx.id} className="border-b last:border-0 hover:bg-muted/50">

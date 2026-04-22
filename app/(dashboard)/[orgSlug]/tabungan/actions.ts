@@ -29,8 +29,8 @@ export async function processDeposit(formData: FormData) {
 
   // Execute Deposit Transaction (RPC is best for isolation, but we'll do it manually here securely with backend)
   // Fetch current tabungan
-  const { data: tabungan, error: tabError } = await supabase
-    .from('tabungan')
+  const { data: tabungan, error: tabError } = await (supabase
+    .from('tabungan') as any)
     .select('*')
     .eq('santri_id', santriId)
     .single()
@@ -42,8 +42,8 @@ export async function processDeposit(formData: FormData) {
   const totalDepositSesudah = Number(tabungan.total_deposit) + jumlah
 
   // 1. Update Tabungan
-  const { error: updateError } = await supabase
-    .from('tabungan')
+  const { error: updateError } = await (supabase
+    .from('tabungan') as any)
     .update({ 
       saldo: saldoSesudah,
       total_deposit: totalDepositSesudah,
@@ -55,8 +55,8 @@ export async function processDeposit(formData: FormData) {
   if (updateError) throw new Error('Gagal update saldo, silahkan coba lagi')
 
   // 2. Insert Transaksi Log
-  const { data: trx, error: trxError } = await supabase
-    .from('transaksi_tabungan')
+  const { data: trx, error: trxError } = await (supabase
+    .from('transaksi_tabungan') as any)
     .insert({
       org_id: orgId,
       santri_id: santriId,

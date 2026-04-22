@@ -13,8 +13,8 @@ export async function createProduk(formData: FormData) {
 
   const supabase = await createClient()
 
-  const { error } = await supabase
-    .from('produk')
+  const { error } = await (supabase
+    .from('produk') as any)
     .insert({
       org_id: orgId,
       nama,
@@ -40,21 +40,21 @@ export async function updateStok(formData: FormData) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { data: produk } = await supabase.from('produk').select('stok').eq('id', produkId).single()
+  const { data: produk } = await supabase.from('produk').select('stok').eq('id', produkId).single() as any
   if (!produk) throw new Error('Produk tidak ditemukan')
 
   const stokSebelum = produk.stok || 0
   const stokSesudah = stokSebelum + addedStok
 
-  const { error: updError } = await supabase
-    .from('produk')
+  const { error: updError } = await (supabase
+    .from('produk') as any)
     .update({ stok: stokSesudah })
     .eq('id', produkId)
 
   if (updError) throw new Error('Gagal update stok produk')
 
   // Log
-  await supabase.from('stok_log').insert({
+  await (supabase.from('stok_log') as any).insert({
     org_id: orgId,
     produk_id: produkId,
     tipe: 'masuk',
@@ -81,8 +81,8 @@ export async function updateProduk(formData: FormData) {
 
   const supabase = await createClient()
 
-  const { error } = await supabase
-    .from('produk')
+  const { error } = await (supabase
+    .from('produk') as any)
     .update({
       nama,
       harga_jual,
@@ -101,8 +101,8 @@ export async function deleteProduk(produkId: string, orgSlug: string) {
   const supabase = await createClient()
 
   // Cek apakah ada transaksi menggunakan produk ini
-  const { count } = await supabase
-    .from('pos_transaksi_detail')
+  const { count } = await (supabase
+    .from('pos_transaksi_detail') as any)
     .select('*', { count: 'exact', head: true })
     .eq('produk_id', produkId)
 
@@ -112,8 +112,8 @@ export async function deleteProduk(produkId: string, orgSlug: string) {
     throw new Error('Produk tidak bisa dihapus karena sudah memiliki riwayat transaksi. Silakan non-aktifkan saja.')
   }
 
-  const { error } = await supabase
-    .from('produk')
+  const { error } = await (supabase
+    .from('produk') as any)
     .delete()
     .eq('id', produkId)
 

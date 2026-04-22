@@ -16,7 +16,7 @@ export default async function OrgLandingPage({
     .from('organizations')
     .select('*')
     .eq('slug', orgSlug)
-    .single()
+    .single() as any
 
   if (error || !organization || organization.status !== 'active') {
     notFound()

@@ -14,8 +14,8 @@ export async function inviteUser(formData: FormData) {
   const { data: { user: currentUser } } = await supabase.auth.getUser()
   if (!currentUser) throw new Error('Not authenticated')
 
-  const { data: profile } = await supabase
-    .from('profiles')
+  const { data: profile } = await (supabase
+    .from('profiles') as any)
     .select('role, org_id')
     .eq('id', currentUser.id)
     .single()
@@ -52,8 +52,8 @@ export async function inviteUser(formData: FormData) {
     // 4. Create Profile entry
     // Usually auth.admin.inviteUserByEmail doesn't automatically create a public.profiles entry 
     // unless you have a trigger. If no trigger, we create it manually.
-    const { error: profileError } = await adminSupabase
-      .from('profiles')
+    const { error: profileError } = await (adminSupabase
+      .from('profiles') as any)
       .insert({
         id: inviteData.user.id,
         org_id: orgId,

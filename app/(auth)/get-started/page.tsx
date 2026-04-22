@@ -26,18 +26,7 @@ export default function GetStartedPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
 
-  // Auto-generate slug from pondok name
-  useEffect(() => {
-    if (formData.pondokName && !formData.slug) {
-      const suggestedSlug = formData.pondokName
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '')
-      
-      setFormData(prev => ({ ...prev, slug: suggestedSlug }))
-    }
-  }, [formData.pondokName])
+
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -152,7 +141,19 @@ export default function GetStartedPage() {
                     placeholder="Al-Hidayah"
                     required
                     value={formData.pondokName}
-                    onChange={(e) => setFormData({...formData, pondokName: e.target.value})}
+                    onChange={(e) => {
+                      const newName = e.target.value
+                      const suggestedSlug = newName
+                        .toLowerCase()
+                        .replace(/[^a-z0-9]/g, '-')
+                        .replace(/-+/g, '-')
+                        .replace(/^-|-$/g, '')
+                      setFormData(prev => ({ 
+                        ...prev, 
+                        pondokName: newName,
+                        slug: prev.slug === '' ? suggestedSlug : prev.slug
+                      }))
+                    }}
                     className="h-12 bg-white/50 border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 rounded-xl transition-all"
                   />
                 </div>

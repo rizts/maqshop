@@ -1,20 +1,32 @@
-export type Role = 'superadmin' | 'admin' | 'staff' | 'ortu'
-export type Division = 'all' | 'banin' | 'banat'
-export type Gender = 'male' | 'female'
-export type SantriStatus = 'active' | 'alumni' | 'keluar'
-export type OrgStatus = 'active' | 'suspended' | 'trial'
-export type TopupRequestStatus = 'pending' | 'approved' | 'rejected'
-export type TipeTransaksi =
-  | 'deposit_cash'
-  | 'deposit_transfer'
-  | 'withdrawal'
-  | 'pos_deduct'
-  | 'adjustment'
-export type PosStatus = 'success' | 'void'
-export type StokLogType = 'masuk' | 'keluar' | 'koreksi'
-export type CoaType = 'revenue' | 'cogs' | 'expense' | 'asset' | 'liability' | 'equity'
-export type JurnalRefType = 'pos_transaksi' | 'topup' | 'withdrawal' | 'manual'
-export type WithdrawalInterval = 'daily' | 'weekly' | 'monthly'
+import {
+  Role,
+  Division,
+  Gender,
+  SantriStatus,
+  OrgStatus,
+  TopupRequestStatus,
+  TipeTransaksi,
+  PosStatus,
+  StokLogType,
+  CoaType,
+  JurnalRefType,
+  WithdrawalInterval
+} from './base'
+
+export type {
+  Role,
+  Division,
+  Gender,
+  SantriStatus,
+  OrgStatus,
+  TopupRequestStatus,
+  TipeTransaksi,
+  PosStatus,
+  StokLogType,
+  CoaType,
+  JurnalRefType,
+  WithdrawalInterval
+}
 
 export interface OrgSettings {
   withdrawal_limit_enabled: boolean
@@ -53,6 +65,7 @@ export interface Profile {
   avatar_url: string | null
   is_active: boolean
   created_at: string
+  organizations?: Organization | null
 }
 
 export interface Santri {
@@ -237,5 +250,5 @@ export interface CartItem {
   subtotal: number
 }
 
-// Database type placeholder - will be generated from Supabase
-export type Database = Record<string, unknown>
+// Database type from generated schema
+export type { Database } from './database'

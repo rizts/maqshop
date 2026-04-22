@@ -20,11 +20,11 @@ export default async function DepositPage({
   const supabase = await createClient()
 
   // Get Org ID
-  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single()
+  const { data: org } = await (supabase.from('organizations') as any).select('id').eq('slug', orgSlug).single()
   
   // Fetch active santri list for selection
-  const { data: santriList } = await supabase
-    .from('santri')
+  const { data: santriList } = await (supabase
+    .from('santri') as any)
     .select('id, full_name, nis')
     .eq('org_id', org?.id)
     .eq('status', 'active')
@@ -61,7 +61,7 @@ export default async function DepositPage({
                 className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <option value="" disabled>-- Pilih data santri --</option>
-                {santriList?.map(s => (
+                {santriList?.map((s: any) => (
                    <option key={s.id} value={s.id}>{s.nis ? `[${s.nis}] ` : ''}{s.full_name}</option>
                 ))}
               </select>

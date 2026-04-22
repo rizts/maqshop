@@ -18,7 +18,7 @@ export default async function LabaRugiPage({
   const supabase = await createClient()
 
   // Find org id
-  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single()
+  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single() as any
   if (!org) return <div>Tenant Not Found</div>
 
   // Set default period to current month if not provided
@@ -27,8 +27,8 @@ export default async function LabaRugiPage({
   const lastDay = end ? end : new Date(date.getFullYear(), date.getMonth() + 1, 0).toISOString().split('T')[0]
 
   // For P&L we query the Jurnal table where COA codes are 4000 (Pendapatan) and 5000 (Beban)
-  let query = supabase
-    .from('jurnal_entries')
+  const query = (supabase
+    .from('jurnal_entries') as any)
     .select(`
       *,
       jurnal!inner(tanggal),
@@ -48,7 +48,7 @@ export default async function LabaRugiPage({
   const bebanByCoa: Record<string, { nama: string; total: number }> = {}
 
   // Calculate
-  entries?.forEach(entry => {
+  entries?.forEach((entry: any) => {
     // Determine net value based on normal balance
     // Pendapatan normal balance is Kredit
     if ((entry.coa as any).tipe === 'pendapatan') {

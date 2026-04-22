@@ -29,8 +29,8 @@ export async function processPenarikan(formData: FormData) {
   if (!user) throw new Error('Unauthorized')
 
   // Execute Withdrawal
-  const { data: tabungan, error: tabError } = await supabase
-    .from('tabungan')
+  const { data: tabungan, error: tabError } = await (supabase
+    .from('tabungan') as any)
     .select('*, organizations(settings)')
     .eq('santri_id', santriId)
     .single()
@@ -51,8 +51,8 @@ export async function processPenarikan(formData: FormData) {
   const totalKeluarSesudah = Number(tabungan.total_keluar) + jumlah
 
   // 1. Update Tabungan
-  const { error: updateError } = await supabase
-    .from('tabungan')
+  const { error: updateError } = await (supabase
+    .from('tabungan') as any)
     .update({ 
       saldo: saldoSesudah,
       total_keluar: totalKeluarSesudah,
@@ -64,8 +64,8 @@ export async function processPenarikan(formData: FormData) {
   if (updateError) throw new Error('Gagal update saldo, silahkan coba lagi')
 
   // 2. Insert Transaksi Log
-  const { data: trx, error: trxError } = await supabase
-    .from('transaksi_tabungan')
+  const { data: trx, error: trxError } = await (supabase
+    .from('transaksi_tabungan') as any)
     .insert({
       org_id: orgId,
       santri_id: santriId,

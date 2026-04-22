@@ -13,16 +13,16 @@ export async function updateTenantStatus(formData: FormData) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return
   
-  const { data: profile } = await supabase
-    .from('profiles')
+  const { data: profile } = await (supabase
+    .from('profiles') as any)
     .select('role')
     .eq('id', user.id)
     .single()
     
   if (profile?.role !== 'superadmin') return
 
-  await supabase
-    .from('organizations')
+  await (supabase
+    .from('organizations') as any)
     .update({ status })
     .eq('id', id)
 

@@ -13,8 +13,8 @@ export default async function InvitePage({ params }: InvitePageProps) {
   const supabase = await createClient()
 
   // Fetch organization ID by slug
-  const { data: organization, error } = await supabase
-    .from('organizations')
+  const { data: organization, error } = await (supabase
+    .from('organizations') as any)
     .select('id, name')
     .eq('slug', orgSlug)
     .single()

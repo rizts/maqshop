@@ -19,15 +19,14 @@ export default async function ProdukListPage({
   
   const supabase = await createClient()
 
-  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single()
+  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single() as any
   if (!org) return <div>Tenant Not Found</div>
 
   // Fetch Produk
-  let query = supabase
-    .from('produk')
-    .select('*')
-    .eq('org_id', org.id)
-    .order('nama', { ascending: true })
+  let query = (supabase.from('produk') as any).select('*')
+  
+  query = query.eq('org_id', org.id)
+               .order('nama', { ascending: true })
 
   if (q) {
     query = query.ilike('nama', `%${q}%`)
@@ -89,7 +88,7 @@ export default async function ProdukListPage({
                 </tr>
               </thead>
               <tbody>
-                {produkList?.map((p, index) => (
+                {produkList?.map((p: any, index: number) => (
                   <tr key={p.id} className="border-b last:border-0 hover:bg-muted/50">
                     <td className="p-4 text-muted-foreground">{index + 1}</td>
                     <td className="p-4 font-medium">{p.nama}</td>

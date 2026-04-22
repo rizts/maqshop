@@ -18,8 +18,8 @@ export default async function SuperadminLayout({
     redirect('/login')
   }
 
-  const { data: profile } = await supabase
-    .from('profiles')
+  const { data: profile } = await (supabase
+    .from('profiles') as any)
     .select('*')
     .eq('id', user.id)
     .single()

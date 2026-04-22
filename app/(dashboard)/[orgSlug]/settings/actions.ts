@@ -32,15 +32,15 @@ export async function updateTenantSettings(formData: FormData) {
     .from('profiles')
     .select('role, org_id')
     .eq('id', user.id)
-    .single()
+    .single() as any
 
   if (!profile) return
   if (profile.role !== 'admin' && profile.role !== 'superadmin') return
   if (profile.role === 'admin' && profile.org_id !== orgId) return
 
   // Update
-  await supabase
-    .from('organizations')
+  await (supabase
+    .from('organizations') as any)
     .update({
       name,
       address,

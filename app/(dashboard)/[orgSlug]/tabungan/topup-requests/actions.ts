@@ -16,8 +16,8 @@ export async function reviewTopupRequest(formData: FormData) {
   if (!user) throw new Error('Unauthorized')
 
   // Get request
-  const { data: request, error: reqError } = await supabase
-    .from('topup_requests')
+  const { data: request, error: reqError } = await (supabase
+    .from('topup_requests') as any)
     .select('*')
     .eq('id', requestId)
     .single()
@@ -27,8 +27,8 @@ export async function reviewTopupRequest(formData: FormData) {
   }
 
   if (action === 'reject') {
-    await supabase
-      .from('topup_requests')
+    await (supabase
+      .from('topup_requests') as any)
       .update({
         status: 'rejected',
         reviewed_by: user.id,
@@ -40,8 +40,8 @@ export async function reviewTopupRequest(formData: FormData) {
     const jumlah = Number(request.jumlah)
 
     // 1. Get Tabungan
-    const { data: tabungan } = await supabase
-      .from('tabungan')
+    const { data: tabungan } = await (supabase
+      .from('tabungan') as any)
       .select('*')
       .eq('santri_id', request.santri_id)
       .single()
@@ -53,8 +53,8 @@ export async function reviewTopupRequest(formData: FormData) {
     const totalDeposit = Number(tabungan.total_deposit) + jumlah
 
     // 2. Update Request Status First
-    const { error: updErr } = await supabase
-      .from('topup_requests')
+    const { error: updErr } = await (supabase
+      .from('topup_requests') as any)
       .update({
         status: 'approved',
         reviewed_by: user.id,
@@ -66,8 +66,8 @@ export async function reviewTopupRequest(formData: FormData) {
     if (updErr) throw new Error('Failed to update request status')
 
     // 3. Update Tabungan
-    await supabase
-      .from('tabungan')
+    await (supabase
+      .from('tabungan') as any)
       .update({
          saldo: saldoSesudah,
          total_deposit: totalDeposit,
@@ -76,8 +76,8 @@ export async function reviewTopupRequest(formData: FormData) {
       .eq('id', tabungan.id)
 
     // 4. Record Transaction
-    const { data: trx } = await supabase
-      .from('transaksi_tabungan')
+    const { data: trx } = await (supabase
+      .from('transaksi_tabungan') as any)
       .insert({
         org_id: orgId,
         santri_id: request.santri_id,

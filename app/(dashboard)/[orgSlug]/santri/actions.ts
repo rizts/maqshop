@@ -16,8 +16,8 @@ export async function createSantri(formData: FormData) {
 
   const supabase = await createClient()
 
-  const { data: santri, error } = await supabase
-    .from('santri')
+  const { data: santri, error } = await (supabase
+    .from('santri') as any)
     .insert({
       org_id: orgId,
       nis,
@@ -29,7 +29,7 @@ export async function createSantri(formData: FormData) {
       status: 'active'
     })
     .select()
-    .single()
+    .single() as any
 
   if (error) {
     throw new Error('Failed to create santri: ' + error.message)
@@ -37,8 +37,8 @@ export async function createSantri(formData: FormData) {
 
   // Create empty tabungan record for the new santri
   if (santri) {
-    const { error: tabunganError } = await supabase
-      .from('tabungan')
+    const { error: tabunganError } = await (supabase
+      .from('tabungan') as any)
       .insert({
         org_id: orgId,
         santri_id: santri.id,
@@ -65,8 +65,8 @@ export async function updateSantri(id: string, formData: FormData) {
 
   const supabase = await createClient()
 
-  const { error } = await supabase
-    .from('santri')
+  const { error } = await (supabase
+    .from('santri') as any)
     .update({
       nis,
       full_name,
@@ -97,8 +97,8 @@ export async function linkGuardian(formData: FormData) {
 
   const supabase = await createClient()
 
-  const { error } = await supabase
-    .from('guardian_santri')
+  const { error } = await (supabase
+    .from('guardian_santri') as any)
     .insert({
       santri_id: santriId,
       guardian_id: guardianId,
@@ -116,8 +116,8 @@ export async function linkGuardian(formData: FormData) {
 export async function unlinkGuardian(linkId: string, santriId: string, orgSlug: string) {
   const supabase = await createClient()
 
-  const { error } = await supabase
-    .from('guardian_santri')
+  const { error } = await (supabase
+    .from('guardian_santri') as any)
     .delete()
     .eq('id', linkId)
 

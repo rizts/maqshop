@@ -16,7 +16,7 @@ export default async function SantriDetailPage({
   const { orgSlug, id } = await params
   const supabase = await createClient()
 
-  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single()
+  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single() as any
   if (!org) notFound()
 
   // Fetch Santri and related data
@@ -32,21 +32,21 @@ export default async function SantriDetailPage({
       )
     `)
     .eq('id', id)
-    .single()
+    .single() as any
 
   if (error || !santri) notFound()
 
   // Fetch potential guardians (role = 'ortu') in the same org
-  const { data: potentialGuardians } = await supabase
-    .from('profiles')
+  const { data: potentialGuardians } = await (supabase
+    .from('profiles') as any)
     .select('id, full_name')
     .eq('org_id', org.id)
     .eq('role', 'ortu')
     .order('full_name')
 
   // Fetch recent transactions (limit 5)
-  const { data: recentTrx } = await supabase
-    .from('transaksi_tabungan')
+  const { data: recentTrx } = await (supabase
+    .from('transaksi_tabungan') as any)
     .select('*')
     .eq('santri_id', id)
     .order('created_at', { ascending: false })
@@ -167,7 +167,7 @@ export default async function SantriDetailPage({
                   </tr>
                 </thead>
                 <tbody>
-                  {recentTrx?.map((trx) => (
+                  {recentTrx?.map((trx: any) => (
                     <tr key={trx.id} className="border-b last:border-0 hover:bg-muted/50">
                       <td className="p-4">{format(new Date(trx.created_at), 'dd MMM yyyy, HH:mm')}</td>
                       <td className="p-4">

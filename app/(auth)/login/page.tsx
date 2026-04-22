@@ -37,7 +37,7 @@ export default function GlobalLoginPage() {
           .from('profiles')
           .select('*, organizations(*)')
           .eq('id', data.user.id)
-          .single()
+          .single() as any
 
         if (profileError) throw profileError
 

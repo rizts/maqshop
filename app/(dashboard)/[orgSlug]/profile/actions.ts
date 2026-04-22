@@ -20,8 +20,8 @@ export async function updateProfileName(formData: FormData): Promise<void> {
     return
   }
 
-  const { error } = await supabase
-    .from('profiles')
+  const { error } = await (supabase
+    .from('profiles') as any)
     .update({ full_name: fullName })
     .eq('id', user.id)
 
