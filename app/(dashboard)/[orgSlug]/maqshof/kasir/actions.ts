@@ -50,41 +50,58 @@ export async function processCheckout(formData: FormData) {
   let hpp = 0
 
   // 2. Insert POS Transaction Master
+  const date = new Date()
+  const dateStr = date.toISOString().split('T')[0].replace(/-/g, '')
+  const randomStr = Math.random().toString(36).substring(2, 7).toUpperCase()
+  const nomor = `POS-${dateStr}-${randomStr}`
+
   const { data: trx, error: trxError } = await supabase
     .from('pos_transaksi')
     .insert({
       org_id: orgId,
+      nomor: nomor,
       santri_id: santriId,
       total: total,
-      metode_bayar: 'deposit',
+      metode_bayar: 'saldo',
       status: 'success',
       kasir_id: user.id
     })
     .select('id')
     .single()
 
-  if (trxError) throw new Error('Gagal rekam transaksi POS')
+  if (trxError) throw new Error(`Gagal rekam transaksi POS: ${trxError.message}`)
 
   const posId = trx.id
 
   // 3. Process Items: Deduct Stok, Insert Detail, Calculate HPP
   for (const item of items) {
-    // Get cost price
-    const { data: prod } = await supabase.from('produk').select('harga_beli, stok').eq('id', item.id).single()
-    const itemTotalBeli = (prod?.harga_beli || 0) * item.qty
+    // Get snapshot data from product
+    const { data: prod } = await supabase
+      .from('produk')
+      .select('nama, harga_beli, harga_jual, stok')
+      .eq('id', item.id)
+      .single()
+    
+    if (!prod) throw new Error(`Produk dengan ID ${item.id} tidak ditemukan`)
+
+    const itemTotalBeli = (prod.harga_beli || 0) * item.qty
     hpp += itemTotalBeli
 
-    // Insert detail
-    await supabase.from('pos_transaksi_detail').insert({
-      pos_id: posId,
+    // Insert detail (matching actual DB schema)
+    const { error: detailError } = await supabase.from('pos_transaksi_detail').insert({
+      pos_transaksi_id: posId,
       produk_id: item.id,
+      nama_produk: prod.nama,
+      harga_beli: prod.harga_beli,
+      harga_jual: prod.harga_jual,
       qty: item.qty,
-      harga_satuan: item.harga,
-      subtotal: item.harga * item.qty
+      subtotal: prod.harga_jual * item.qty
     })
 
-    // Deduct stock if there is stock management logic required
-    if (prod && prod.stok !== null) {
+    if (detailError) throw new Error(`Gagal mencatat detail transaksi: ${detailError.message}`)
+
+    // Deduct stock if exists
+    if (prod.stok !== null) {
       await supabase.from('produk').update({ stok: prod.stok - item.qty }).eq('id', item.id)
     }
   }
@@ -101,20 +118,23 @@ export async function processCheckout(formData: FormData) {
     .eq('id', tabungan.id)
 
   // 5. Insert Transaksi Tabungan Log
-  const { data: mutasi } = await supabase
+  const { data: mutasi, error: mutasiError } = await supabase
     .from('transaksi_tabungan')
     .insert({
       org_id: orgId,
       santri_id: santriId,
-      tipe: 'pos_payment',
+      tipe: 'pos_deduct',
       jumlah: total,
       saldo_sebelum: saldoSebelum,
       saldo_sesudah: saldoSesudah,
-      keterangan: `Pembelanjaan Maqshof (#${posId.split('-')[0]})`,
+      keterangan: `Pembelanjaan Maqshof (#${nomor})`,
+      ref_pos_id: posId,
       dibuat_oleh: user.id
     })
     .select('id')
     .single()
+
+  if (mutasiError) throw new Error(`Gagal mencatat mutasi tabungan: ${mutasiError.message}`)
 
   // 6. Accounting Journal
   // Debit Hutang Tabungan (2000), Kredit Penjualan (4000)
@@ -125,7 +145,7 @@ export async function processCheckout(formData: FormData) {
          supabase, orgId,
          tanggal: new Date().toISOString().split('T')[0],
          keterangan: `Penjualan POS Maqshof #${posId.split('-')[0]}`,
-         refId: posId, refType: 'pos_transaction', dibuatOleh: user.id,
+         refId: posId, refType: 'pos_transaksi', dibuatOleh: user.id,
          entries: [
             { kode: '2000', debet: total, kredit: 0 },   // Tabungan Berkurang
             { kode: '4000', debet: 0, kredit: total },   // Pendapatan Bertambah

@@ -2,8 +2,9 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { PlusCircle, Search, ArrowLeft } from 'lucide-react'
+import { PlusCircle, Search, ArrowLeft, Pencil } from 'lucide-react'
 import { Input } from '@/components/ui/input'
+import DeleteProductButton from './delete-button'
 import { formatCurrency } from '@/lib/utils/currency'
 
 export default async function ProdukListPage({
@@ -84,6 +85,7 @@ export default async function ProdukListPage({
                   <th className="h-10 px-4 font-medium text-muted-foreground text-right border-l">Harga Jual</th>
                   <th className="h-10 px-4 font-medium text-muted-foreground text-right border-l">Sisa Qty (Stok)</th>
                   <th className="h-10 px-4 font-medium text-muted-foreground text-center border-l w-24">Status</th>
+                  <th className="h-10 px-4 font-medium text-muted-foreground text-center border-l w-32">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -106,11 +108,25 @@ export default async function ProdukListPage({
                         {p.aktif ? 'Aktif' : 'Non-Aktif'}
                       </span>
                     </td>
+                    <td className="p-4 text-center border-l">
+                      <div className="flex items-center justify-center gap-1">
+                        <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-slate-500 hover:text-primary hover:bg-primary/10">
+                          <Link href={`/${orgSlug}/maqshof/produk/${p.id}/edit`}>
+                            <Pencil className="h-4 w-4" />
+                          </Link>
+                        </Button>
+                        <DeleteProductButton 
+                          produkId={p.id} 
+                          produkNama={p.nama} 
+                          orgSlug={orgSlug} 
+                        />
+                      </div>
+                    </td>
                   </tr>
                 ))}
                 {(!produkList || produkList.length === 0) && (
                   <tr>
-                    <td colSpan={6} className="p-8 text-center text-muted-foreground">Tidak ada produk ditemukan.</td>
+                    <td colSpan={7} className="p-8 text-center text-muted-foreground">Tidak ada produk ditemukan.</td>
                   </tr>
                 )}
               </tbody>
