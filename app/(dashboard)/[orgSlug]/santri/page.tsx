@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { PlusCircle, Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { ImporSantriDialog } from './impor-santri-dialog'
 
 export default async function SantriListPage({
   params,
@@ -43,12 +44,15 @@ export default async function SantriListPage({
           <h1 className="text-3xl font-bold tracking-tight">Data Santri</h1>
           <p className="text-muted-foreground">Kelola santri dan akun mereka.</p>
         </div>
-        <Button asChild>
-          <Link href={`/${orgSlug}/santri/tambah`}>
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Tambah Santri
-          </Link>
-        </Button>
+        <div className="flex gap-2">
+          <ImporSantriDialog orgId={org.id} orgSlug={orgSlug} />
+          <Button asChild>
+            <Link href={`/${orgSlug}/santri/tambah`}>
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Tambah Santri
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <Card>
