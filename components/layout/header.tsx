@@ -99,19 +99,21 @@ export function Header() {
                 <User className="mr-2 h-4 w-4 text-slate-400 group-focus:text-emerald-600" />
                 <span>Profil Saya</span>
               </DropdownMenuItem>
-              <DropdownMenuItem 
-                onClick={() => {
-                  if (profile?.role === 'superadmin') {
-                    router.push('/superadmin/dashboard')
-                  } else if (organization?.slug) {
-                    router.push(`/${organization.slug}/settings`)
-                  }
-                }}
-                className="rounded-lg px-3 py-2 cursor-pointer focus:bg-emerald-50 focus:text-emerald-700 group transition-colors"
-              >
-                <SettingsIcon className="mr-2 h-4 w-4 text-slate-400 group-focus:text-emerald-600" />
-                <span>Pengaturan Akun</span>
-              </DropdownMenuItem>
+              {profile?.role !== 'ortu' && (
+                <DropdownMenuItem 
+                  onClick={() => {
+                    if (profile?.role === 'superadmin') {
+                      router.push('/superadmin/dashboard')
+                    } else if (organization?.slug) {
+                      router.push(`/${organization.slug}/settings`)
+                    }
+                  }}
+                  className="rounded-lg px-3 py-2 cursor-pointer focus:bg-emerald-50 focus:text-emerald-700 group transition-colors"
+                >
+                  <SettingsIcon className="mr-2 h-4 w-4 text-slate-400 group-focus:text-emerald-600" />
+                  <span>Pengaturan Akun</span>
+                </DropdownMenuItem>
+              )}
             </div>
             <DropdownMenuSeparator className="mx-2 bg-slate-50" />
             <div className="p-1">
