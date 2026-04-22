@@ -1,6 +1,6 @@
-# Deposantri — Platform Manajemen Keuangan Pondok Pesantren
+# Maqshop — Platform Manajemen Keuangan Pondok Pesantren
 
-Deposantri adalah aplikasi finansial terpadu berbasis **multi-tenant** yang dirancang khusus untuk kebutuhan pondok pesantren. Aplikasi ini mengintegrasikan sistem tabungan santri, Point of Sales (POS) Maqshof (koperasi), dan laporan akuntansi otomatis.
+Maqshop adalah aplikasi finansial terpadu berbasis **multi-tenant** yang dirancang khusus untuk kebutuhan pondok pesantren. Aplikasi ini mengintegrasikan sistem tabungan santri, Point of Sales (POS) Maqshof (koperasi), dan laporan akuntansi otomatis.
 
 ## Fitur Utama
 
@@ -28,7 +28,7 @@ Deposantri adalah aplikasi finansial terpadu berbasis **multi-tenant** yang dira
 1. **Clone repositori:**
    ```bash
    git clone <repo-url>
-   cd deposantri
+   cd Maqshop
    ```
 
 2. **Install dependencies:**
@@ -61,6 +61,3 @@ Deposantri adalah aplikasi finansial terpadu berbasis **multi-tenant** yang dira
 - `components/`: UI components (shadcn/ui).
 - `lib/`: Utilities, Supabase clients, dan Zustand stores.
 - `types/`: Definisi tipe data TypeScript.
-
----
-Dikembangkan oleh Tim Antigravity.
