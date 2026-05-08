@@ -210,7 +210,7 @@ export default async function PlatformLandingPage() {
                     </div>
                     <div>
                       <p className="text-sm font-bold text-white">Email & Obrolan</p>
-                      <p className="text-sm text-slate-400">help@maqshop.id | WA: +62 812-3456-7890</p>
+                      <p className="text-sm text-slate-400">rizts.tech@gmail.com | WA: +62 856-2302-121</p>
                     </div>
                   </div>
                 </div>
