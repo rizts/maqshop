@@ -42,27 +42,24 @@ export async function submitTopupRequest(formData: FormData) {
     throw new Error('Anda tidak memiliki otoritas untuk akun santri ini')
   }
 
-  // Upload Logic Placeholder - Vercel / NextJS Server Actions
-  // In a real app we upload formData.get('bukti') (a File object) to Supabase Storage
-  // For this MVP, we simulate a URL or handle a simple base64/placeholder
   const buktiFile = formData.get('bukti') as File | null
   let buktiUrl = ''
   
   if (buktiFile && buktiFile.size > 0) {
     const fileExt = buktiFile.name.split('.').pop()
-    const fileName = `${user.id}-${Math.random()}.${fileExt}`
+    const fileName = `${user.id}/${Date.now()}.${fileExt}`
     
-    // In actual implementation (need storage bucket 'receipts' created):
-    /*
-    const { data: uData, error: uError } = await supabase.storage
+    const { error: uError } = await supabase.storage
       .from('receipts')
       .upload(fileName, buktiFile)
     
-    if (uError) throw new Error('Gagal upload bukti')
+    if (uError) {
+      console.error('Upload error:', uError)
+      throw new Error('Gagal upload bukti transfer: ' + uError.message)
+    }
+
     const { data: urlData } = supabase.storage.from('receipts').getPublicUrl(fileName)
     buktiUrl = urlData.publicUrl
-    */
-    buktiUrl = 'https://via.placeholder.com/400x600?text=Bukti+Transfer' // Placeholder for MVP
   } else {
     throw new Error('Bukti transfer wajib di-upload')
   }

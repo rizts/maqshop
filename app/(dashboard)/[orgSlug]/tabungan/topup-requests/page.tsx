@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Check, X, FileImage } from 'lucide-react'
+import { ArrowLeft, Check, X, FileImage, FileText } from 'lucide-react'
 import { formatCurrency } from '@/lib/utils/currency'
 import { format } from 'date-fns'
 import { reviewTopupRequest } from './actions'
@@ -62,11 +62,20 @@ export default async function TopupRequestsPage({
                   </div>
                   {/* Since MVP uses placeholder url: */}
                   <div className="w-full h-48 bg-white border rounded-md overflow-hidden flex items-center justify-center relative">
-                    <img 
-                      src={req.bukti_url || '/placeholder.jpg'} 
-                      alt="Bukti Transfer" 
-                      className="max-h-full max-w-full object-contain"
-                    />
+                    {req.bukti_url?.toLowerCase().endsWith('.pdf') ? (
+                      <div className="flex flex-col items-center gap-2 p-4 text-center">
+                        <FileText className="h-12 w-12 text-red-500" />
+                        <span className="text-xs font-medium text-muted-foreground break-all">
+                          Lihat PDF di Tab Baru
+                        </span>
+                      </div>
+                    ) : (
+                      <img 
+                        src={req.bukti_url || '/placeholder.jpg'} 
+                        alt="Bukti Transfer" 
+                        className="max-h-full max-w-full object-contain"
+                      />
+                    )}
                   </div>
                   <Button variant="link" size="sm" asChild>
                     <a href={req.bukti_url} target="_blank" rel="noreferrer">Lihat Gambar Penuh &nearr;</a>
