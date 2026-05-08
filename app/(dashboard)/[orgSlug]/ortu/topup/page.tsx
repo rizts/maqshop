@@ -51,14 +51,27 @@ export default function OrtuTopupPage() {
   }, [profile, organization, supabase])
 
   const handleSubmit = async (formData: FormData) => {
-    setIsLoading(true)
-    formData.append('orgSlug', orgSlug)
+    // Client-side file size validation (Vercel limit is 4.5MB, setting to 4MB for safety)
+    const file = formData.get('bukti') as File
+    if (file && file.size > 4 * 1024 * 1024) {
+      toast.error('File terlalu besar. Maksimal ukuran adalah 4MB.')
+      return
+    }
 
+    setIsLoading(true)
+    
     try {
       await submitTopupRequest(formData)
-      toast.success('Pengajuan top-up berhasil dikirim. Menunggu persetujuan admin.')
+      // Note: If successful, it will redirect to the dashboard
     } catch (error: any) {
-      toast.error(error.message || 'Terjadi kesalahan')
+      // Handle the redirect "error" which is normal for Server Actions in try-catch
+      // In some Next.js versions, we need to check if it's a redirect or re-throw it
+      if (error.message?.includes('NEXT_REDIRECT')) {
+        return // Let Next.js handle the redirect
+      }
+      
+      console.error('Submission error:', error)
+      toast.error(error.message || 'Terjadi kesalahan saat mengirim pengajuan')
       setIsLoading(false)
     }
   }
@@ -72,6 +85,7 @@ export default function OrtuTopupPage() {
 
       <Card>
         <form action={handleSubmit}>
+          <input type="hidden" name="orgSlug" value={orgSlug} />
           <CardHeader>
             <CardTitle>Form Konfirmasi Transfer</CardTitle>
             <CardDescription>Pilih anak Anda dan lampirkan bukti struk transfer atau screenshot mobile banking.</CardDescription>
@@ -133,7 +147,7 @@ export default function OrtuTopupPage() {
                       <Input id="bukti" name="bukti" type="file" className="sr-only" required accept="image/jpeg,image/png,image/jpg,application/pdf" />
                     </label>
                   </div>
-                  <p className="text-xs leading-5 text-gray-600">PNG, JPG, PDF up to 5MB</p>
+                  <p className="text-xs leading-5 text-gray-600">PNG, JPG, PDF up to 4MB</p>
                 </div>
               </div>
             </div>
