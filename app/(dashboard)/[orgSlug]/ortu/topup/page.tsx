@@ -19,6 +19,7 @@ export default function OrtuTopupPage() {
   const [children, setChildren] = useState<any[]>([])
   const [isLoadingData, setIsLoadingData] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const { organization, profile } = useAuthStore()
   const supabase = createClient()
 
@@ -50,11 +51,22 @@ export default function OrtuTopupPage() {
     fetchChildren()
   }, [profile, organization, supabase])
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      if (file.size > 4 * 1024 * 1024) {
+        toast.error('File terlalu besar. Maksimal ukuran adalah 4MB.')
+        e.target.value = ''
+        setSelectedFile(null)
+        return
+      }
+      setSelectedFile(file)
+    }
+  }
+
   const handleSubmit = async (formData: FormData) => {
-    // Client-side file size validation (Vercel limit is 4.5MB, setting to 4MB for safety)
-    const file = formData.get('bukti') as File
-    if (file && file.size > 4 * 1024 * 1024) {
-      toast.error('File terlalu besar. Maksimal ukuran adalah 4MB.')
+    if (!selectedFile) {
+      toast.error('Bukti transfer wajib di-upload')
       return
     }
 
@@ -143,11 +155,25 @@ export default function OrtuTopupPage() {
                       htmlFor="bukti"
                       className="relative cursor-pointer rounded-md bg-white font-semibold text-primary focus-within:outline-none hover:text-primary/80"
                     >
-                      <span>Upload a file</span>
-                      <Input id="bukti" name="bukti" type="file" className="sr-only" required accept="image/jpeg,image/png,image/jpg,application/pdf" />
+                      <span>{selectedFile ? 'Ubah file' : 'Pilih file'}</span>
+                      <Input 
+                        id="bukti" 
+                        name="bukti" 
+                        type="file" 
+                        className="sr-only" 
+                        required 
+                        accept="image/jpeg,image/png,image/jpg,application/pdf"
+                        onChange={handleFileChange}
+                      />
                     </label>
                   </div>
-                  <p className="text-xs leading-5 text-gray-600">PNG, JPG, PDF up to 4MB</p>
+                  {selectedFile ? (
+                    <div className="mt-2 text-sm font-medium text-primary">
+                      {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
+                    </div>
+                  ) : (
+                    <p className="text-xs leading-5 text-gray-600">PNG, JPG, PDF up to 4MB</p>
+                  )}
                 </div>
               </div>
             </div>
