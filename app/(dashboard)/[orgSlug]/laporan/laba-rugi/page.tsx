@@ -28,7 +28,7 @@ export default async function LabaRugiPage({
 
   // For P&L we query the Jurnal table where COA codes are 4000 (Pendapatan) and 5000 (Beban)
   const query = (supabase
-    .from('jurnal_entries') as any)
+    .from('jurnal_detail') as any)
     .select(`
       *,
       jurnal!inner(tanggal),

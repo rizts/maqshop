@@ -35,7 +35,7 @@ export default async function BukuBesarPage({
 
   // Query Entries
   let query = (supabase
-    .from('jurnal_entries') as any)
+    .from('jurnal_detail') as any)
     .select(`
       *,
       jurnal!inner(tanggal, keterangan, ref_id),
