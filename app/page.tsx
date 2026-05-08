@@ -201,7 +201,7 @@ export default async function PlatformLandingPage() {
                     </div>
                     <div>
                       <p className="text-sm font-bold text-white">Pusat Dukungan</p>
-                      <p className="text-sm text-slate-400">Gedung Inovasi Digital, Lantai 4</p>
+                      <p className="text-sm text-slate-400">Risdy Labs (risdylabs.my.id)</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4 bg-slate-800/50 p-4 rounded-2xl border border-white/5">
