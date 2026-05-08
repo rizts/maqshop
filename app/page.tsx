@@ -201,7 +201,11 @@ export default async function PlatformLandingPage() {
                     </div>
                     <div>
                       <p className="text-sm font-bold text-white">Pusat Dukungan</p>
-                      <p className="text-sm text-slate-400">Risdy Labs (risdylabs.my.id)</p>
+                      <p className="text-sm text-slate-400">
+                        <a href="https://risdylabs.my.id" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-colors">
+                          Risdy Labs (risdylabs.my.id)
+                        </a>
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4 bg-slate-800/50 p-4 rounded-2xl border border-white/5">
@@ -210,7 +214,11 @@ export default async function PlatformLandingPage() {
                     </div>
                     <div>
                       <p className="text-sm font-bold text-white">Email & Obrolan</p>
-                      <p className="text-sm text-slate-400">rizts.tech@gmail.com | WA: +62 856-2302-121</p>
+                      <p className="text-sm text-slate-400">
+                        <a href="mailto:rizts.tech@gmail.com" className="hover:text-emerald-500 transition-colors">rizts.tech@gmail.com</a>
+                        {' | '}
+                        <a href="https://wa.me/628562302121" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-colors">WA: +62 856-2302-121</a>
+                      </p>
                     </div>
                   </div>
                 </div>

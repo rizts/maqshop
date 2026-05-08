@@ -67,7 +67,7 @@ export default function TermsPage() {
               <div>
                 <h3 className="font-bold text-slate-900">Pertanyaan Hukum?</h3>
                 <p className="text-sm text-slate-600 mt-1">
-                  Jika Anda memiliki pertanyaan mengenai Syarat dan Ketentuan ini, silakan hubungi tim legal kami melalui <strong>legal@maqshop.id</strong>.
+                  Jika Anda memiliki pertanyaan mengenai Syarat dan Ketentuan ini, silakan hubungi tim legal kami melalui <a href="mailto:rizts.tech@gmail.com" className="font-bold underline hover:text-emerald-700 transition-colors text-emerald-600">rizts.tech@gmail.com</a>.
                 </p>
               </div>
             </div>
