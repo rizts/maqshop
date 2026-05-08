@@ -38,7 +38,7 @@ export default async function BukuBesarPage({
     .from('jurnal_detail') as any)
     .select(`
       *,
-      jurnal!inner(tanggal, keterangan, ref_id),
+      jurnal!inner(tanggal, keterangan, ref_id, org_id),
       coa:chart_of_accounts!inner(kode, nama)
     `)
     .eq('jurnal.org_id', org.id)

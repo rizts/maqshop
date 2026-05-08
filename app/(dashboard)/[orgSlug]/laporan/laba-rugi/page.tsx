@@ -18,7 +18,7 @@ export default async function LabaRugiPage({
   const supabase = await createClient()
 
   // Find org id
-  const { data: org } = await supabase.from('organizations').select('id').eq('slug', orgSlug).single() as any
+  const { data: org } = await supabase.from('organizations').select('id, name').eq('slug', orgSlug).single() as any
   if (!org) return <div>Tenant Not Found</div>
 
   // Set default period to current month if not provided
@@ -31,7 +31,7 @@ export default async function LabaRugiPage({
     .from('jurnal_detail') as any)
     .select(`
       *,
-      jurnal!inner(tanggal),
+      jurnal!inner(tanggal, org_id),
       coa:chart_of_accounts!inner(kode, nama, tipe)
     `)
     .eq('jurnal.org_id', org.id)
