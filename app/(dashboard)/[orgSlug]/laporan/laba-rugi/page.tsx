@@ -35,7 +35,7 @@ export default async function LabaRugiPage({
       coa:chart_of_accounts!inner(kode, nama, tipe)
     `)
     .eq('jurnal.org_id', org.id)
-    .in('coa.tipe', ['pendapatan', 'beban'])
+    .in('coa.tipe', ['revenue', 'cogs', 'expense'])
     .gte('jurnal.tanggal', firstDay)
     .lte('jurnal.tanggal', lastDay)
 
@@ -50,8 +50,8 @@ export default async function LabaRugiPage({
   // Calculate
   entries?.forEach((entry: any) => {
     // Determine net value based on normal balance
-    // Pendapatan normal balance is Kredit
-    if ((entry.coa as any).tipe === 'pendapatan') {
+    // revenue normal balance is Kredit
+    if ((entry.coa as any).tipe === 'revenue') {
       const net = Number(entry.kredit) - Number(entry.debet)
       totalPendapatan += net
       
@@ -59,8 +59,8 @@ export default async function LabaRugiPage({
       if (!pendapatanByCoa[coaKey]) pendapatanByCoa[coaKey] = { nama: (entry.coa as any).nama, total: 0 }
       pendapatanByCoa[coaKey].total += net
     } 
-    // Beban normal balance is Debet
-    else if ((entry.coa as any).tipe === 'beban') {
+    // cogs and expense normal balance is Debet
+    else if (['cogs', 'expense'].includes((entry.coa as any).tipe)) {
       const net = Number(entry.debet) - Number(entry.kredit)
       totalBeban += net
       
